@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// 1. TASKS BOARD
+model Task {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  assignee    String   @default("ANDREW")
+  status      String   @default("TODO")
+  priority    String   @default("MEDIUM")
+  dueDate     DateTime?
+  source      String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+// 2. CONTENT PIPELINE
+model ContentItem {
+  id          String    @id @default(cuid())
+  title       String
+  stage       String   @default("IDEA")
+  script      String?
+  thumbnailUrl String?
+  notes       String?
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// 3. CALENDAR
+model CalendarEvent {
+  id          String    @id @default(cuid())
+  title       String
+  time        String
+  recurrence  String?
+  status      String    @default("active")
+  source      String
+  color       String    @default("blue")
+  lastRun     DateTime?
+  nextRun     DateTime?
+}
+
+// 4. MEMORY (expanded from filesystem at runtime)
+model Memory {
+  id        String   @id @default(cuid())
+  type      String
+  content   String
+  category  String?
+  date      DateTime
+  source    String
+  vector    String?
+  createdAt DateTime @default(now())
+}
+
+// 5. TEAM
+model TeamMember {
+  id              String   @id @default(cuid())
+  name            String
+  role            String
+  department      String
+  avatar          String
+  currentTask     String   @default("Idle")
+  status          String   @default("IDLE")
+  responsibilities String
+}
