@@ -1,0 +1,7 @@
+{
+  "members": [
+    { "id": "claw", "name": "Claw", "role": "Executive AI Assistant", "department": "Executive", "avatar": "🦅", "currentTask": "Managing all systems", "status": "WORKING" },
+    { "id": "crm-agent", "name": "CRM Agent", "role": "Lead Developer", "department": "Engineering", "avatar": "👨‍💻", "currentTask": "Syncing contacts", "status": "WORKING" },
+    { "id": "business-council", "name": "Business Council", "role": "Chief Analyst", "department": "Intelligence", "avatar": "📊", "currentTask": "Preparing nightly analysis", "status": "WORKING" }
+  ]
+}

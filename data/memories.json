@@ -1,0 +1,7 @@
+{
+  "memories": [
+    { "id": "1", "type": "preference", "content": "Andrew prefers direct, concise communication. Military-adjacent style.", "date": "2026-02-10", "category": "Communication" },
+    { "id": "2", "type": "learning", "content": "KyberOS requires KYBER_SERVICE_KEY environment variable. Use keychain.", "date": "2026-02-11", "category": "Technical" },
+    { "id": "3", "type": "decision", "content": "Use Kimi K2.5 as default model, MiniMax for coding subagents.", "date": "2026-02-09", "category": "AI Configuration" }
+  ]
+}

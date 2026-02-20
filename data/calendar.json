@@ -1,0 +1,7 @@
+{
+  "events": [
+    { "id": "1", "title": "Business Council", "time": "2:00 AM", "recurrence": "daily", "status": "active" },
+    { "id": "2", "title": "Security Council", "time": "3:30 AM", "recurrence": "daily", "status": "active" },
+    { "id": "3", "title": "Daily Briefing", "time": "7:00 AM", "recurrence": "daily", "status": "active" }
+  ]
+}

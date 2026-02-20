@@ -1,0 +1,7 @@
+{
+  "items": [
+    { "id": "1", "title": "IntuBlade Demo Video", "stage": "IDEA", "notes": "Create demo for Montgomery County EMS" },
+    { "id": "2", "title": "Product Update Announcement", "stage": "SCRIPT", "notes": "New features coming in Q1" },
+    { "id": "3", "title": "Customer Testimonial - Fairfax", "stage": "THUMBNAIL", "notes": "Interview with fire chief" }
+  ]
+}
