@@ -8,18 +8,23 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const router = useRouter()
 
-  const handleLogin = () => {
-    if (password === 'napier-secure-2024') {
-      // Set auth cookie
-      document.cookie = 'mc-auth=authenticated; path=/; max-age=604800; SameSite=Lax; Secure'
-      // Also set in localStorage as backup
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('mc-auth', 'authenticated')
+  const handleLogin = async () => {
+    setError('')
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password })
+      })
+
+      if (!res.ok) {
+        setError('Invalid password')
+        return
       }
-      // Navigate to dashboard
+
       window.location.href = '/'
-    } else {
-      setError('Invalid password')
+    } catch {
+      setError('Login failed')
     }
   }
 

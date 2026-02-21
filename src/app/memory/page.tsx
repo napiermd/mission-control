@@ -1,11 +1,9 @@
+import { getMemories as fetchMemories } from '@/lib/queries'
+
+export const dynamic = 'force-dynamic'
+
 async function getMemories() {
-  try {
-    const res = await fetch('http://localhost:3000/api/memories', { cache: 'no-store' })
-    if (!res.ok) return []
-    return await res.json()
-  } catch {
-    return []
-  }
+  return fetchMemories()
 }
 
 export default async function MemoryPage() {

@@ -1,11 +1,9 @@
+import { getTeamMembers } from '@/lib/queries'
+
+export const dynamic = 'force-dynamic'
+
 async function getTeam() {
-  try {
-    const res = await fetch('http://localhost:3000/api/team', { cache: 'no-store' })
-    if (!res.ok) return []
-    return await res.json()
-  } catch {
-    return []
-  }
+  return getTeamMembers()
 }
 
 export default async function TeamPage() {

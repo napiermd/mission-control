@@ -1,11 +1,9 @@
+import { getTasks as fetchTasks } from '@/lib/queries'
+
+export const dynamic = 'force-dynamic'
+
 async function getTasks() {
-  try {
-    const res = await fetch('http://localhost:3000/api/tasks', { cache: 'no-store' })
-    if (!res.ok) return []
-    return await res.json()
-  } catch {
-    return []
-  }
+  return fetchTasks()
 }
 
 export default async function TasksPage() {
@@ -51,6 +49,18 @@ export default async function TasksPage() {
                   <div className="font-medium">{task.title}</div>
                   {task.description && (
                     <div className="text-sm text-gray-400 mt-1 line-clamp-2">{task.description}</div>
+                  )}
+                  {task.link && (
+                    <div className="mt-2">
+                      <a
+                        href={task.link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-xs text-blue-300 hover:text-blue-200 underline"
+                      >
+                        Open in Obsidian
+                      </a>
+                    </div>
                   )}
                   <div className="flex justify-between items-center mt-3">
                     <span className={`text-xs px-2 py-1 rounded ${

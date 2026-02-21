@@ -1,11 +1,9 @@
+import { getCalendarEvents } from '@/lib/queries'
+
+export const dynamic = 'force-dynamic'
+
 async function getCalendar() {
-  try {
-    const res = await fetch('http://localhost:3000/api/calendar', { cache: 'no-store' })
-    if (!res.ok) return []
-    return await res.json()
-  } catch {
-    return []
-  }
+  return getCalendarEvents()
 }
 
 export default async function CalendarPage() {

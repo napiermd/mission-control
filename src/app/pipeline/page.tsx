@@ -1,11 +1,9 @@
+import { getContentItems } from '@/lib/queries'
+
+export const dynamic = 'force-dynamic'
+
 async function getContent() {
-  try {
-    const res = await fetch('http://localhost:3000/api/content', { cache: 'no-store' })
-    if (!res.ok) return []
-    return await res.json()
-  } catch {
-    return []
-  }
+  return getContentItems()
 }
 
 export default async function PipelinePage() {
