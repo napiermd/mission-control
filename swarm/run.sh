@@ -29,6 +29,18 @@ if [[ -z "$AGENT_BIN" ]]; then
   fi
 fi
 
+# Auto-load Anthropic key for Claude runs (works for Telegram/cron too)
+if [[ "$AGENT_BIN" == "claude" && -z "${ANTHROPIC_API_KEY:-}" ]]; then
+  ANTHROPIC_API_KEY="$(security find-generic-password -s anthropic-api-key -w 2>/dev/null || true)"
+  export ANTHROPIC_API_KEY
+fi
+
+if [[ "$AGENT_BIN" == "claude" && -z "${ANTHROPIC_API_KEY:-}" ]]; then
+  echo "Claude selected but ANTHROPIC_API_KEY is missing."
+  echo "Add key to keychain: security add-generic-password -U -a \"$USER\" -s anthropic-api-key -w '<KEY>'"
+  exit 1
+fi
+
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 REPO_NAME="$(basename "$REPO_ROOT")"
 cd "$REPO_ROOT"
