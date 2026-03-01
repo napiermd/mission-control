@@ -1,0 +1,116 @@
+# Orchestrator Configuration
+# Business context + agent routing rules
+
+orchestrator:
+  name: "dev-orchestrator"
+  obsidian_vault: "/Users/andrewbot/Library/Mobile Documents/iCloud~md~obsidian/Documents/Tri-Vault"
+  context_sources:
+    - "10 Projects/**/*.md"
+    - "Companies/IntuBlade/**/*.md"
+    - "01 OS/CHANGELOG.md"
+    - "20 Meetings/**/*.md"
+  
+  # Agent selection rules
+  agent_routing:
+    backend_logic:
+      agent: "codex"
+      model: "gpt-5.2-codex"
+      flags: ["--full-auto"]
+    
+    frontend_ui:
+      agent: "claude"
+      model: "claude-sonnet-3.5"
+      flags: ["--full-auto"]
+    
+    design_spec:
+      agent: "gemini"
+      model: "gemini-2.0-flash-exp"
+      flags: []
+    
+    bug_fix:
+      agent: "codex"
+      model: "gpt-5.2-codex"
+      flags: ["--full-auto"]
+    
+    refactor:
+      agent: "codex"
+      model: "gpt-5.2-codex"
+      flags: ["--full-auto"]
+  
+  # Prompt templates
+  prompt_templates:
+    feature_request: |
+      Customer Request Context:
+      {customer_context}
+      
+      Feature Requirements:
+      {requirements}
+      
+      Technical Constraints:
+      {constraints}
+      
+      Task: {task_description}
+      
+      Definition of Done:
+      - Feature implemented and working
+      - Tests added (if applicable)
+      - PR created with screenshots
+      - CI passing
+    
+    bug_fix: |
+      Bug Report:
+      {bug_description}
+      
+      Error Context:
+      {error_context}
+      
+      Related Code:
+      {file_paths}
+      
+      Task: Fix the bug and add test to prevent regression.
+      
+      Definition of Done:
+      - Bug fixed and verified
+      - Test added to prevent regression
+      - PR created
+      - CI passing
+    
+    refactor: |
+      Refactor Request:
+      {refactor_reason}
+      
+      Files to Refactor:
+      {file_paths}
+      
+      Constraints:
+      - Do not change external API/behavior
+      - Add tests if missing
+      - Update documentation
+      
+      Definition of Done:
+      - Code refactored and cleaner
+      - All existing tests still pass
+      - New tests added where needed
+      - PR created
+
+# Ralph Loop v2 - Pattern Learning
+learning:
+  patterns_db: "~/.clawdbot/prompt-patterns.json"
+  
+  success_criteria:
+    - "CI passing on first attempt"
+    - "PR merged without requested changes"
+    - "No follow-up bug reports within 7 days"
+  
+  failure_signals:
+    - "CI failed"
+    - "PR requested changes"
+    - "Agent respawned"
+    - "Human intervention required"
+  
+  tracked_dimensions:
+    - "task_type"
+    - "agent_used"
+    - "prompt_template"
+    - "file_count"
+    - "complexity"
