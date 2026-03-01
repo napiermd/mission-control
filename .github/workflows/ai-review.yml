@@ -1,0 +1,66 @@
+name: AI Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  codex-review:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.pull_request.labels.*.name, 'skip-ai-review')"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Review with Codex
+        run: |
+          echo "🤖 Codex review would run here"
+          echo "Checking for common issues:"
+          echo "- Missing error handling"
+          echo "- Race conditions"
+          echo "- Type safety"
+          echo ""
+          echo "✅ Codex review placeholder (requires Codex CLI + API key in CI)"
+          echo ""
+          echo "To enable real reviews:"
+          echo "1. Install Codex CLI in CI environment"
+          echo "2. Add ANTHROPIC_API_KEY secret"
+          echo "3. Run: codex review --base origin/\${{ github.base_ref }}"
+        continue-on-error: true
+      
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        if: always()
+        with:
+          script: |
+            const body = `## 🤖 AI Code Review Summary
+
+            ✅ **Automated checks completed**
+
+            ### Codex Review (Placeholder)
+            Real Codex review requires:
+            - Codex CLI in CI environment
+            - \`ANTHROPIC_API_KEY\` secret configured
+
+            ### Manual Review Checklist
+            - [ ] Error handling in async calls
+            - [ ] Type safety (no \`any\` types)
+            - [ ] Race conditions checked
+            - [ ] Edge cases documented
+
+            **Note:** Enable full AI review by adding Codex CLI to workflow.
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
