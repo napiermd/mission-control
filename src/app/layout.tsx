@@ -13,6 +13,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     { href: '/pipeline', label: 'Pipeline', icon: '📺' },
     { href: '/calendar', label: 'Calendar', icon: '📅' },
     { href: '/memory', label: 'Memory', icon: '🧠' },
+    { href: '/learning', label: 'Learning', icon: '📚' },
     { href: '/team', label: 'Team', icon: '👥' },
   ]
 

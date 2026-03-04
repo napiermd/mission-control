@@ -1,23 +1,31 @@
 import { NextResponse } from 'next/server'
 import { supabaseServer } from '@/lib/supabase'
-import { readData } from '@/lib/data'
 
-export async function GET() {
+export async function POST(request: Request) {
   try {
+    const body = await request.json()
+    const { type, content, category, source } = body
+
+    if (!type || !content) {
+      return NextResponse.json({ error: 'Missing type or content' }, { status: 400 })
+    }
+
     const supabase = supabaseServer()
-    const { data, error } = await supabase.from('mc_memories').select('*').order('date', { ascending: false })
+    const { data, error } = await supabase
+      .from('mc_memories')
+      .insert({
+        type: type.toUpperCase(),
+        content,
+        category: category || 'General',
+        source: source || 'auto-capture',
+        date: new Date().toISOString().split('T')[0]
+      })
+      .select()
+
     if (error) throw error
-    const memories = (data || []).map((m: any) => ({
-      ...m,
-      type: typeof m.type === 'string' ? m.type.toUpperCase() : m.type
-    }))
-    return NextResponse.json(memories)
-  } catch {
-    const data = await readData<{ memories: any[] }>('memories.json')
-    const memories = (data.memories || []).map((m: any) => ({
-      ...m,
-      type: typeof m.type === 'string' ? m.type.toUpperCase() : m.type
-    }))
-    return NextResponse.json(memories)
+
+    return NextResponse.json({ success: true, data: data[0] })
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }

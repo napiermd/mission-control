@@ -51,3 +51,28 @@ export async function getProjects() {
   if (error) return []
   return data || []
 }
+
+export async function getLearnings(days = 30) {
+  const supabase = supabaseServer()
+  const since = new Date(Date.now() - days * 86400000).toISOString()
+  const { data, error } = await supabase
+    .from('mc_learnings')
+    .select('*')
+    .gte('created_at', since)
+    .order('created_at', { ascending: false })
+  if (error) return []
+  return data || []
+}
+
+export async function getObsidianStats() {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : 'http://localhost:3000'
+    const res = await fetch(`${baseUrl}/api/obsidian`, { cache: 'no-store' })
+    if (!res.ok) return { available: false, inboxCount: 0, totalNotes: 0, recentNotes: [], folders: [] }
+    return res.json()
+  } catch {
+    return { available: false, inboxCount: 0, totalNotes: 0, recentNotes: [], folders: [] }
+  }
+}

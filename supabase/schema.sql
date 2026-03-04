@@ -47,3 +47,20 @@ create table if not exists mc_calendar (
   color text,
   source text
 );
+
+-- Learnings: structured agent knowledge capture
+create table if not exists mc_learnings (
+  id uuid primary key default gen_random_uuid(),
+  agent text not null,
+  type text not null default 'LEARNING',
+  title text,
+  content text not null,
+  category text,
+  context text,
+  source text default 'auto',
+  session_id text,
+  tags text[],
+  created_at timestamptz default now()
+);
+create index if not exists idx_learnings_agent on mc_learnings(agent);
+create index if not exists idx_learnings_created on mc_learnings(created_at desc);
