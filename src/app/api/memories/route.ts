@@ -1,22 +1,26 @@
 import { NextResponse } from 'next/server'
 import { supabaseServer } from '@/lib/supabase'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   try {
     const supabase = supabaseServer()
-    const { data, error, count } = await supabase
+    const { data, error } = await supabase
       .from('mc_memories')
-      .select('*', { count: 'exact' })
+      .select('*')
       .order('date', { ascending: false })
-    
+
+    if (error) {
+      return NextResponse.json({ data: [], error: error.message })
+    }
+
     return NextResponse.json({ 
-      count: data?.length || 0,
-      error: error?.message || null,
-      first3: (data || []).slice(0, 3).map((m: any) => ({ id: m.id, type: m.type, content: m.content?.substring(0, 50) })),
-      last3: (data || []).slice(-3).map((m: any) => ({ id: m.id, type: m.type, content: m.content?.substring(0, 50) })),
+      data: data || [],
+      count: (data || []).length 
     })
-  } catch (e: any) {
-    return NextResponse.json({ error: e.message })
+  } catch (error: any) {
+    return NextResponse.json({ data: [], error: error.message })
   }
 }
 
