@@ -31,6 +31,10 @@ export async function POST(request: Request) {
         }
       }
 
+      // Delete stale team members not in current roster
+      const agentIds = agents.map(a => a.id)
+      await supabase.from('mc_team').delete().not('id', 'in', `(${agentIds.join(',')})`)
+
       const { error } = await supabase
         .from('mc_team')
         .upsert(agents, { onConflict: 'id' })
