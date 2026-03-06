@@ -1,17 +1,17 @@
 import { createClient } from '@supabase/supabase-js'
-import TasksClient from './TasksClient'
+import ContactsClient from './ContactsClient'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-export default async function TasksPage() {
-  let tasks: any[] = []
+export default async function ContactsPage() {
+  let contacts: any[] = []
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY
   if (url && key) {
     const supabase = createClient(url, key, { auth: { persistSession: false } })
-    const { data } = await supabase.from('mc_tasks').select('*').order('priority')
-    tasks = data || []
+    const { data } = await supabase.from('mc_contacts').select('*').order('name')
+    contacts = data || []
   }
-  return <TasksClient tasks={tasks} />
+  return <ContactsClient contacts={contacts} />
 }

@@ -64,3 +64,19 @@ create table if not exists mc_learnings (
 );
 create index if not exists idx_learnings_agent on mc_learnings(agent);
 create index if not exists idx_learnings_created on mc_learnings(created_at desc);
+
+-- Contacts/CRM
+create table if not exists mc_contacts (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  role text,
+  category text default 'External',
+  handle text,
+  email text,
+  timezone text,
+  compensation text,
+  notes text,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+create index if not exists idx_contacts_category on mc_contacts(category);
