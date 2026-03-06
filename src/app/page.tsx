@@ -1,10 +1,10 @@
 import DashboardClient from '@/components/DashboardClient'
-import { getCalendarEvents, getContentItems, getMemories, getTasks, getTeamMembers, getMetrics, getProjects } from '@/lib/queries'
+import { getCalendarEvents, getContentItems, getMemories, getTasks, getTeamMembers, getMetrics, getProjects, getLearnings } from '@/lib/queries'
 
 export const dynamic = 'force-dynamic'
 
 export default async function Dashboard() {
-  const [tasks, content, team, memories, calendar, metrics, projects] = await Promise.all([
+  const [tasks, content, team, memories, calendar, metrics, projects, learnings] = await Promise.all([
     getTasks(),
     getContentItems(),
     getTeamMembers(),
@@ -12,6 +12,7 @@ export default async function Dashboard() {
     getCalendarEvents(),
     getMetrics(),
     getProjects(),
+    getLearnings(7),
   ])
 
   const todoTasks = tasks.filter((t: any) => t.status === 'TODO').length
@@ -58,6 +59,7 @@ export default async function Dashboard() {
       team={team as any}
       stats={stats}
       projects={projects as any}
+      learnings={learnings as any}
     />
   )
 }
