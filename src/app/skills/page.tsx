@@ -145,7 +145,6 @@ export default function SkillsPage() {
           <div className="text-xs text-gray-500 mt-2">70-89% success</div>
         </div>
         <div className="card">
-          <div className="card">
           <div className="text-gray-400 text-sm">Critical</div>
           <div className="text-3xl font-bold text-red-400">{criticalCount}</div>
           <div className="text-xs text-gray-500 mt-2">&lt;70% success</div>
