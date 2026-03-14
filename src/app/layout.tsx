@@ -15,6 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     { href: '/memory', label: 'Memory', icon: '🧠' },
     { href: '/learning', label: 'Learning', icon: '📚' },
     { href: '/team', label: 'Team', icon: '👥' },
+    { href: '/skills', label: 'Skills', icon: '🧬' },
     { href: '/contacts', label: 'Contacts', icon: '📇' },
     { href: '/settings', label: 'Settings', icon: '⚙️' },
   ]
