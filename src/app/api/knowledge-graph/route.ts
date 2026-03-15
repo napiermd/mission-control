@@ -1,22 +1,16 @@
 import { NextResponse } from 'next/server'
+import { readFileSync } from 'fs'
+import path from 'path'
 
-// In production, read from static JSON file deployed with the app
-// In local dev, could read from filesystem, but for consistency use static file
-const GRAPH_URL = '/data/knowledge-graph.json'
-
-async function loadGraph() {
-  const baseUrl = process.env.VERCEL_URL 
-    ? `https://${process.env.VERCEL_URL}`
-    : 'http://localhost:3000'
-  
-  const url = `${baseUrl}${GRAPH_URL}`
-  const response = await fetch(url, { cache: 'no-store' })
-  
-  if (!response.ok) {
-    throw new Error(`Failed to fetch graph: ${response.statusText}`)
+// Read static JSON bundled with the deployment (public/data/)
+function loadGraph() {
+  try {
+    const filePath = path.join(process.cwd(), 'public', 'data', 'knowledge-graph.json')
+    const raw = readFileSync(filePath, 'utf-8')
+    return JSON.parse(raw)
+  } catch {
+    return { nodes: [], edges: [], stats: { total_nodes: 0, total_edges: 0, total_tags: 0 }, tags: [] }
   }
-  
-  return response.json()
 }
 
 export async function GET(request: Request) {
@@ -24,90 +18,74 @@ export async function GET(request: Request) {
   const action = searchParams.get('action')
 
   try {
-    const graph = await loadGraph()
+    const graph = loadGraph()
+    const nodes: any[] = Array.isArray(graph.nodes) ? graph.nodes : []
+    const edges: any[] = Array.isArray(graph.edges) ? graph.edges : []
+
+    const stats = graph.stats || {
+      total_nodes: nodes.length,
+      total_edges: edges.length,
+      total_tags: Array.isArray(graph.tags) ? graph.tags.length : 0
+    }
 
     if (action === 'full') {
-      return NextResponse.json(graph)
+      return NextResponse.json({ nodes, edges, stats })
     }
 
     if (action === 'stats') {
-      return NextResponse.json(graph.stats || {
-        total_nodes: graph.nodes?.length || 0,
-        total_edges: graph.edges?.length || 0,
-        total_tags: graph.tags?.length || 0
-      })
+      return NextResponse.json(stats)
     }
 
     if (action === 'hubs') {
       const minLinks = parseInt(searchParams.get('min') || '5')
-      const hubs = (graph.nodes || [])
-        .filter((n: any) => n.total_links >= minLinks)
-        .sort((a: any, b: any) => b.total_links - a.total_links)
+      const hubs = nodes
+        .filter(n => (n.total_links || 0) >= minLinks)
+        .sort((a, b) => (b.total_links || 0) - (a.total_links || 0))
         .slice(0, 20)
-      
       return NextResponse.json(hubs)
     }
 
     if (action === 'orphans') {
-      const orphans = (graph.nodes || [])
-        .filter((n: any) => n.total_links === 0)
+      const orphans = nodes
+        .filter(n => (n.total_links || 0) === 0)
         .slice(0, 50)
-      
       return NextResponse.json(orphans)
     }
 
     if (action === 'clusters') {
-      // Group by tags
       const clusters: Record<string, string[]> = {}
-      
-      ;(graph.nodes || []).forEach((node: any) => {
+      nodes.forEach(node => {
         ;(node.tags || []).forEach((tag: string) => {
           if (!clusters[tag]) clusters[tag] = []
           clusters[tag].push(node.title)
         })
       })
-
-      // Filter to clusters with ≥3 notes
       const filtered = Object.entries(clusters)
         .filter(([_, notes]) => notes.length >= 3)
         .map(([tag, notes]) => ({ tag, count: notes.length, notes: notes.slice(0, 10) }))
         .sort((a, b) => b.count - a.count)
         .slice(0, 20)
-
       return NextResponse.json(filtered)
     }
 
     if (action === 'search') {
-      const query = searchParams.get('q')?.toLowerCase() || ''
-      
-      const results = (graph.nodes || [])
-        .filter((n: any) => 
+      const query = (searchParams.get('q') || '').toLowerCase()
+      const results = nodes
+        .filter(n =>
           n.title.toLowerCase().includes(query) ||
           (n.tags || []).some((t: string) => t.toLowerCase().includes(query))
         )
         .slice(0, 20)
-
       return NextResponse.json(results)
     }
 
-    // Default: return summary
-    return NextResponse.json({
-      stats: graph.stats || {
-        total_nodes: graph.nodes?.length || 0,
-        total_edges: graph.edges?.length || 0,
-        total_tags: graph.tags?.length || 0
-      },
-      recent_nodes: (graph.nodes || []).slice(0, 10)
-    })
+    return NextResponse.json({ stats, recent_nodes: nodes.slice(0, 10) })
 
   } catch (error: any) {
     console.error('Knowledge graph API error:', error)
-    return NextResponse.json({ 
-      error: error.message,
-      // Fallback data structure
+    return NextResponse.json({
       stats: { total_nodes: 0, total_edges: 0, total_tags: 0 },
-      nodes: [],
-      edges: []
+      nodes: [], edges: []
     }, { status: 500 })
   }
 }
