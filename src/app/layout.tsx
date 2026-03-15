@@ -14,6 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     { href: '/calendar', label: 'Calendar', icon: '📅' },
     { href: '/memory', label: 'Memory', icon: '🧠' },
     { href: '/learning', label: 'Learning', icon: '📚' },
+    { href: '/knowledge', label: 'Knowledge', icon: '🕸️' },
     { href: '/team', label: 'Team', icon: '👥' },
     { href: '/skills', label: 'Skills', icon: '🧬' },
     { href: '/contacts', label: 'Contacts', icon: '📇' },
