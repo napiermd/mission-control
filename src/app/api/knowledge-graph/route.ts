@@ -1,29 +1,46 @@
 import { NextResponse } from 'next/server'
-import { readFile } from 'fs/promises'
-import { homedir } from 'os'
-import path from 'path'
 
-const GRAPH_PATH = path.join(homedir(), '.openclaw', 'obsidian-graph.json')
+// In production, read from static JSON file deployed with the app
+// In local dev, could read from filesystem, but for consistency use static file
+const GRAPH_URL = '/data/knowledge-graph.json'
+
+async function loadGraph() {
+  const baseUrl = process.env.VERCEL_URL 
+    ? `https://${process.env.VERCEL_URL}`
+    : 'http://localhost:3000'
+  
+  const url = `${baseUrl}${GRAPH_URL}`
+  const response = await fetch(url, { cache: 'no-store' })
+  
+  if (!response.ok) {
+    throw new Error(`Failed to fetch graph: ${response.statusText}`)
+  }
+  
+  return response.json()
+}
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const action = searchParams.get('action')
 
   try {
-    const graphData = await readFile(GRAPH_PATH, 'utf-8')
-    const graph = JSON.parse(graphData)
+    const graph = await loadGraph()
 
     if (action === 'full') {
       return NextResponse.json(graph)
     }
 
     if (action === 'stats') {
-      return NextResponse.json(graph.stats)
+      return NextResponse.json(graph.stats || {
+        total_nodes: graph.nodes?.length || 0,
+        total_edges: graph.edges?.length || 0,
+        total_tags: graph.tags?.length || 0
+      })
     }
 
     if (action === 'hubs') {
       const minLinks = parseInt(searchParams.get('min') || '5')
-      const hubs = graph.nodes
+      const hubs = (graph.nodes || [])
         .filter((n: any) => n.total_links >= minLinks)
         .sort((a: any, b: any) => b.total_links - a.total_links)
         .slice(0, 20)
@@ -32,7 +49,7 @@ export async function GET(request: Request) {
     }
 
     if (action === 'orphans') {
-      const orphans = graph.nodes
+      const orphans = (graph.nodes || [])
         .filter((n: any) => n.total_links === 0)
         .slice(0, 50)
       
@@ -43,8 +60,8 @@ export async function GET(request: Request) {
       // Group by tags
       const clusters: Record<string, string[]> = {}
       
-      graph.nodes.forEach((node: any) => {
-        node.tags?.forEach((tag: string) => {
+      ;(graph.nodes || []).forEach((node: any) => {
+        ;(node.tags || []).forEach((tag: string) => {
           if (!clusters[tag]) clusters[tag] = []
           clusters[tag].push(node.title)
         })
@@ -63,10 +80,10 @@ export async function GET(request: Request) {
     if (action === 'search') {
       const query = searchParams.get('q')?.toLowerCase() || ''
       
-      const results = graph.nodes
+      const results = (graph.nodes || [])
         .filter((n: any) => 
           n.title.toLowerCase().includes(query) ||
-          n.tags?.some((t: string) => t.toLowerCase().includes(query))
+          (n.tags || []).some((t: string) => t.toLowerCase().includes(query))
         )
         .slice(0, 20)
 
@@ -75,12 +92,22 @@ export async function GET(request: Request) {
 
     // Default: return summary
     return NextResponse.json({
-      stats: graph.stats,
-      recent_nodes: graph.nodes.slice(0, 10)
+      stats: graph.stats || {
+        total_nodes: graph.nodes?.length || 0,
+        total_edges: graph.edges?.length || 0,
+        total_tags: graph.tags?.length || 0
+      },
+      recent_nodes: (graph.nodes || []).slice(0, 10)
     })
 
   } catch (error: any) {
     console.error('Knowledge graph API error:', error)
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ 
+      error: error.message,
+      // Fallback data structure
+      stats: { total_nodes: 0, total_edges: 0, total_tags: 0 },
+      nodes: [],
+      edges: []
+    }, { status: 500 })
   }
 }

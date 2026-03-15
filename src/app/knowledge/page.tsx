@@ -51,12 +51,22 @@ export default function KnowledgeGraphPage() {
         fetch('/api/knowledge-graph?action=orphans')
       ])
 
-      setStats(await statsRes.json())
-      setHubs(await hubsRes.json())
-      setClusters(await clustersRes.json())
-      setOrphans(await orphansRes.json())
+      const statsData = await statsRes.json()
+      const hubsData = await hubsRes.json()
+      const clustersData = await clustersRes.json()
+      const orphansData = await orphansRes.json()
+
+      setStats(statsData)
+      setHubs(Array.isArray(hubsData) ? hubsData : [])
+      setClusters(Array.isArray(clustersData) ? clustersData : [])
+      setOrphans(Array.isArray(orphansData) ? orphansData : [])
     } catch (error) {
       console.error('Failed to load knowledge graph:', error)
+      // Set empty defaults on error
+      setStats({ total_nodes: 0, total_edges: 0, total_tags: 0 })
+      setHubs([])
+      setClusters([])
+      setOrphans([])
     } finally {
       setLoading(false)
     }
