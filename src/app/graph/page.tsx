@@ -95,7 +95,7 @@ export default function GraphPage() {
           n.title.toLowerCase().includes(filter.toLowerCase()) ||
           n.tags.some(t => t.toLowerCase().includes(filter.toLowerCase()))
         ),
-        edges: graphData.edges.filter(e => {
+        links: graphData.edges.filter(e => {
           const sourceMatches = graphData.nodes.find(n => n.id === e.source && 
             (n.title.toLowerCase().includes(filter.toLowerCase()) || 
              n.tags.some(t => t.toLowerCase().includes(filter.toLowerCase()))))
@@ -105,7 +105,7 @@ export default function GraphPage() {
           return sourceMatches || targetMatches
         })
       }
-    : graphData
+    : { nodes: graphData.nodes, links: graphData.edges }
 
   return (
     <div className="h-screen flex flex-col">
@@ -113,7 +113,7 @@ export default function GraphPage() {
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-3xl font-bold">Knowledge Graph</h1>
           <div className="text-sm text-gray-400">
-            {filteredData.nodes.length} nodes • {filteredData.edges.length} edges
+            {filteredData.nodes.length} nodes • {filteredData.links.length} edges
           </div>
         </div>
 
