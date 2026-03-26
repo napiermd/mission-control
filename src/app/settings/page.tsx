@@ -23,8 +23,9 @@ export default async function SettingsPage() {
     { name: "Obsidian", status: "active", detail: "Tri-Vault" },
     { name: "Ollama", status: "active", detail: "localhost:11434" },
     { name: "Slack", status: "active", detail: "IntuBlade workspace" },
-    { name: "Google Workspace", status: "pending", detail: "gogcli — needs calendar auth" },
-    { name: "HubSpot", status: "pending", detail: "API integration in progress" },
+    { name: "Google Calendar", status: "active", detail: "Sayvant + IntuBlade calendars synced" },
+    { name: "Gmail", status: "active", detail: "MCP sync to mc_emails" },
+    { name: "HubSpot", status: "active", detail: "Paid tier — API connected" },
     { name: "Sentry", status: "inactive", detail: "Not configured" },
     { name: "Figma", status: "inactive", detail: "MCP not configured" },
   ]
