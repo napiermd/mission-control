@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import ContextSwitcher, { classifyEmail } from "@/components/ContextSwitcher"
+import ContextSwitcher from "@/components/ContextSwitcher"
 
 type Thread = {
   id: string
@@ -13,6 +13,7 @@ type Thread = {
   date: string
   is_unread: boolean
   labels: string[]
+  venture: string
 }
 
 function timeAgo(dateStr: string) {
@@ -59,7 +60,7 @@ export default function GmailClient() {
 
   const filtered = venture === "all"
     ? threads
-    : threads.filter((t) => classifyEmail(t.from_email || t.from_name, t.subject) === venture)
+    : threads.filter((t) => (t.venture || "intublade") === venture)
 
   const unreadCount = filtered.filter((t) => t.is_unread).length
 
@@ -95,7 +96,7 @@ export default function GmailClient() {
       {!loading && (
         <div className="space-y-1">
           {filtered.map((thread) => {
-            const ventureTag = classifyEmail(thread.from_email || thread.from_name, thread.subject)
+            const ventureTag = thread.venture || "intublade"
             return (
               <div
                 key={thread.id}
