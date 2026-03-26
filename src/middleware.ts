@@ -26,10 +26,19 @@ export function middleware(request: NextRequest) {
     return response
   }
   
+  // API routes: return 401 instead of redirect
+  if (request.nextUrl.pathname.startsWith('/api')) {
+    // Allow login API without auth
+    if (request.nextUrl.pathname === '/api/login') {
+      return NextResponse.next()
+    }
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   // Redirect to login page
   return NextResponse.redirect(new URL('/login', request.url))
 }
 
 export const config = {
-  matcher: ['/((?!login|api|_next/static|_next/image|favicon.ico).*)']
+  matcher: ['/((?!login|_next/static|_next/image|favicon.ico).*)']
 }
