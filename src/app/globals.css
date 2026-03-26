@@ -1,19 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --bg-primary: #FFFBF5;
-  --bg-secondary: #FFFFFF;
-  --bg-card: #F5F0EA;
-  --text-primary: #1A1A1A;
-  --text-secondary: #6B7280;
-  --accent-blue: #2563eb;
-  --accent-green: #059669;
-  --accent-yellow: #d97706;
-  --accent-red: #dc2626;
-  --accent-purple: #7c3aed;
-  --border: #E8E0D8;
+  --bg-primary: #0a0e17;
+  --bg-secondary: #111827;
+  --bg-card: #1a1f2e;
+  --text-primary: #e2e8f0;
+  --text-secondary: #64748b;
+  --accent-amber: #f59e0b;
+  --accent-green: #22c55e;
+  --accent-red: #ef4444;
+  --accent-blue: #3b82f6;
+  --accent-purple: #8b5cf6;
+  --border: #1e293b;
 }
 
 * {
@@ -23,53 +25,80 @@
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* Subtle grid background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(30, 41, 59, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 41, 59, 0.3) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .main-content {
   min-height: 100vh;
+  position: relative;
+  z-index: 1;
 }
 
 .card {
   background-color: var(--bg-secondary);
-  border-radius: 12px;
-  padding: 20px;
+  border-radius: 8px;
+  padding: 16px;
   border: 1px solid var(--border);
+  transition: border-color 0.2s;
+}
+
+.card:hover {
+  border-color: rgba(245, 158, 11, 0.2);
 }
 
 .btn {
-  padding: 8px 16px;
-  border-radius: 8px;
+  padding: 6px 14px;
+  border-radius: 6px;
   font-weight: 500;
+  font-family: inherit;
+  font-size: 12px;
   transition: all 0.2s;
 }
 
 .btn-primary {
-  background-color: var(--accent-blue);
-  color: white;
+  background-color: var(--accent-amber);
+  color: #0a0e17;
 }
 
 .btn-primary:hover {
-  background-color: #1d4ed8;
+  background-color: #d97706;
 }
 
 .btn-secondary {
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-card);
   color: var(--text-primary);
   border: 1px solid var(--border);
 }
 
 .btn-secondary:hover {
-  background-color: var(--bg-card);
+  background-color: var(--bg-secondary);
+  border-color: var(--accent-amber);
 }
 
 .input {
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-card);
   color: var(--text-primary);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 8px 12px;
   outline: none;
+  font-family: inherit;
+  font-size: 12px;
 }
 
 .input::placeholder {
@@ -77,35 +106,36 @@ body {
 }
 
 .input:focus {
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
-  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
+  border-color: var(--accent-amber);
 }
 
 .select {
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-card);
   color: var(--text-primary);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 8px 12px;
   outline: none;
+  font-family: inherit;
+  font-size: 12px;
 }
 
 .select:focus {
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
-  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
+  border-color: var(--accent-amber);
 }
 
-.status-working { color: var(--accent-green); }
-.status-idle { color: var(--accent-yellow); }
-.status-offline { color: var(--text-secondary); }
+/* Section headers — TARS HUD style */
+.section-header {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-amber);
+}
 
-.priority-urgent { color: var(--accent-red); }
-.priority-high { color: var(--accent-yellow); }
-.priority-medium { color: var(--accent-blue); }
-.priority-low { color: var(--text-secondary); }
-
-.stage-idea { border-left: 3px solid #6b7280; }
-.stage-script { border-left: 3px solid #7c3aed; }
-.stage-thumbnail { border-left: 3px solid #d97706; }
-.stage-filming { border-left: 3px solid #2563eb; }
-.stage-published { border-left: 3px solid #059669; }
+/* Scanline effect on cards */
+.card-glow {
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.05);
+}

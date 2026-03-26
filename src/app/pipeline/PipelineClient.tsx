@@ -17,11 +17,11 @@ type ContentItem = {
 type ViewMode = "pipeline" | "calendar" | "list"
 
 const stages = [
-  { id: "IDEA", label: "💡 Ideas", color: "gray", bg: "bg-cream-100", text: "text-warm-muted", dot: "bg-gray-400" },
-  { id: "SCRIPT", label: "📝 Script", color: "purple", bg: "bg-purple-50", text: "text-purple-600", dot: "bg-purple-400" },
-  { id: "THUMBNAIL", label: "🖼️ Thumbnail", color: "yellow", bg: "bg-amber-50", text: "text-amber-600", dot: "bg-yellow-400" },
-  { id: "FILMING", label: "🎬 Filming", color: "blue", bg: "bg-blue-50", text: "text-blue-600", dot: "bg-blue-400" },
-  { id: "PUBLISHED", label: "✅ Published", color: "green", bg: "bg-green-50", text: "text-green-600", dot: "bg-green-400" },
+  { id: "IDEA", label: "💡 Ideas", color: "gray", bg: "bg-space-panel", text: "text-hud-muted", dot: "bg-gray-400" },
+  { id: "SCRIPT", label: "📝 Script", color: "purple", bg: "bg-purple-900/30", text: "text-purple-400", dot: "bg-purple-400" },
+  { id: "THUMBNAIL", label: "🖼️ Thumbnail", color: "yellow", bg: "bg-amber-900/30", text: "text-amber-400", dot: "bg-yellow-400" },
+  { id: "FILMING", label: "🎬 Filming", color: "blue", bg: "bg-blue-900/30", text: "text-blue-400", dot: "bg-blue-400" },
+  { id: "PUBLISHED", label: "✅ Published", color: "green", bg: "bg-green-900/30", text: "text-green-400", dot: "bg-green-400" },
 ]
 
 const platformIcons: Record<string, string> = {
@@ -71,10 +71,10 @@ export default function PipelineClient({ content }: { content: ContentItem[] }) 
             return (
               <div key={s.id} className="flex-1">
                 <div className="flex justify-between text-xs mb-1">
-                  <span className="text-warm-muted">{s.label}</span>
+                  <span className="text-hud-muted">{s.label}</span>
                   <span className={s.text}>{count}</span>
                 </div>
-                <div className="h-2 bg-cream-200 rounded-full overflow-hidden">
+                <div className="h-2 bg-space-border rounded-full overflow-hidden">
                   <div className={`h-full rounded-full ${s.dot}`} style={{ width: `${pct}%` }} />
                 </div>
               </div>
@@ -89,10 +89,10 @@ export default function PipelineClient({ content }: { content: ContentItem[] }) 
           const items = filtered.filter((c) => c.stage === stage.id)
           return (
             <div key={stage.id} className="card min-h-[200px]">
-              <div className="flex items-center gap-2 mb-3 pb-2 border-b border-cream-200">
+              <div className="flex items-center gap-2 mb-3 pb-2 border-b border-space-border">
                 <div className={`w-2.5 h-2.5 rounded-full ${stage.dot}`} />
                 <span className={`text-sm font-semibold ${stage.text}`}>{stage.label}</span>
-                <span className="text-xs text-warm-muted ml-auto">{items.length}</span>
+                <span className="text-xs text-hud-muted ml-auto">{items.length}</span>
               </div>
               <div className="space-y-2">
                 {items.map((item) => (
@@ -103,13 +103,13 @@ export default function PipelineClient({ content }: { content: ContentItem[] }) 
                   >
                     <div className="text-sm font-medium">{item.title}</div>
                     {item.platform && (
-                      <div className="text-[10px] text-warm-muted mt-1">{platformIcons[item.platform.toLowerCase()] || "📄"} {item.platform}</div>
+                      <div className="text-[10px] text-hud-muted mt-1">{platformIcons[item.platform.toLowerCase()] || "📄"} {item.platform}</div>
                     )}
-                    {item.notes && <div className="text-[10px] text-warm-muted/70 mt-1 line-clamp-2">{item.notes}</div>}
-                    {item.scheduled_date && <div className="text-[10px] text-amber-600 mt-1">📅 {item.scheduled_date}</div>}
+                    {item.notes && <div className="text-[10px] text-hud-muted/70 mt-1 line-clamp-2">{item.notes}</div>}
+                    {item.scheduled_date && <div className="text-[10px] text-amber-400 mt-1">📅 {item.scheduled_date}</div>}
                   </div>
                 ))}
-                {items.length === 0 && <div className="text-center py-6 text-warm-muted/70 text-xs">Empty</div>}
+                {items.length === 0 && <div className="text-center py-6 text-hud-muted/70 text-xs">Empty</div>}
               </div>
             </div>
           )
@@ -140,13 +140,13 @@ export default function PipelineClient({ content }: { content: ContentItem[] }) 
     return (
       <div>
         <div className="card mb-4">
-          <h3 className="text-sm font-semibold text-warm-muted mb-2">Weekly Posting Schedule</h3>
-          <p className="text-xs text-warm-muted">{scheduled.length} scheduled / published items</p>
+          <h3 className="text-sm font-semibold text-hud-muted mb-2">Weekly Posting Schedule</h3>
+          <p className="text-xs text-hud-muted">{scheduled.length} scheduled / published items</p>
         </div>
         <div className="grid grid-cols-7 gap-2">
           {byDay.map(({ day, items }) => (
             <div key={day} className="card min-h-[150px]">
-              <div className="text-xs text-warm-muted font-semibold mb-2 text-center">{day}</div>
+              <div className="text-xs text-hud-muted font-semibold mb-2 text-center">{day}</div>
               <div className="space-y-1">
                 {items.map((item) => {
                   const s = stageOf(item.stage)
@@ -157,7 +157,7 @@ export default function PipelineClient({ content }: { content: ContentItem[] }) 
                     </div>
                   )
                 })}
-                {items.length === 0 && <div className="text-center text-warm-muted/50 text-[10px] py-4">—</div>}
+                {items.length === 0 && <div className="text-center text-hud-muted/50 text-[10px] py-4">—</div>}
               </div>
             </div>
           ))}
@@ -166,7 +166,7 @@ export default function PipelineClient({ content }: { content: ContentItem[] }) 
         {/* Unscheduled */}
         {content.filter((c) => !c.scheduled_date && !c.published_at).length > 0 && (
           <div className="card mt-4">
-            <h3 className="text-sm font-semibold text-warm-muted mb-2">Unscheduled ({content.filter((c) => !c.scheduled_date && !c.published_at).length})</h3>
+            <h3 className="text-sm font-semibold text-hud-muted mb-2">Unscheduled ({content.filter((c) => !c.scheduled_date && !c.published_at).length})</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
               {content.filter((c) => !c.scheduled_date && !c.published_at).map((item) => {
                 const s = stageOf(item.stage)
@@ -191,11 +191,11 @@ export default function PipelineClient({ content }: { content: ContentItem[] }) 
         {filtered.map((item) => {
           const s = stageOf(item.stage)
           return (
-            <div key={item.id} className="flex items-center gap-3 p-3 bg-cream-100 rounded-lg cursor-pointer hover:bg-cream-200" onClick={() => setSelectedItem(item)}>
+            <div key={item.id} className="flex items-center gap-3 p-3 bg-space-panel rounded-lg cursor-pointer hover:bg-space-panel" onClick={() => setSelectedItem(item)}>
               <div className={`w-2.5 h-2.5 rounded-full shrink-0 ${s.dot}`} />
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-medium truncate">{item.title}</div>
-                <div className="text-[10px] text-warm-muted">{item.platform || "—"} · {item.scheduled_date || "Unscheduled"}</div>
+                <div className="text-[10px] text-hud-muted">{item.platform || "—"} · {item.scheduled_date || "Unscheduled"}</div>
               </div>
               <span className={`text-[10px] px-2 py-0.5 rounded ${s.bg} ${s.text}`}>{s.label}</span>
             </div>
@@ -211,20 +211,20 @@ export default function PipelineClient({ content }: { content: ContentItem[] }) 
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Content Pipeline</h1>
-          <p className="text-warm-muted text-sm mt-1">{content.length} items · {content.filter((c) => c.stage === "PUBLISHED").length} published</p>
+          <p className="text-hud-muted text-sm mt-1">{content.length} items · {content.filter((c) => c.stage === "PUBLISHED").length} published</p>
         </div>
         <div className="flex gap-1">
           {(["pipeline", "calendar", "list"] as ViewMode[]).map((v) => (
-            <button key={v} onClick={() => setView(v)} className={`px-3 py-1.5 rounded text-xs capitalize ${view === v ? "bg-blue-600 text-white" : "bg-cream-100 text-warm-muted hover:bg-cream-200"}`}>{v}</button>
+            <button key={v} onClick={() => setView(v)} className={`px-3 py-1.5 rounded text-xs capitalize ${view === v ? "bg-hud-amber text-space-black" : "bg-space-panel text-hud-muted hover:bg-space-panel"}`}>{v}</button>
           ))}
         </div>
       </div>
 
       {/* Stage Filter */}
       <div className="flex gap-2 flex-wrap">
-        <button onClick={() => setStageFilter("ALL")} className={`px-3 py-1.5 rounded text-xs ${stageFilter === "ALL" ? "bg-blue-600 text-white" : "bg-cream-100 text-warm-muted"}`}>All</button>
+        <button onClick={() => setStageFilter("ALL")} className={`px-3 py-1.5 rounded text-xs ${stageFilter === "ALL" ? "bg-hud-amber text-space-black" : "bg-space-panel text-hud-muted"}`}>All</button>
         {stages.map((s) => (
-          <button key={s.id} onClick={() => setStageFilter(s.id)} className={`px-3 py-1.5 rounded text-xs ${stageFilter === s.id ? `${s.bg} ${s.text}` : "bg-cream-100 text-warm-muted"}`}>{s.label}</button>
+          <button key={s.id} onClick={() => setStageFilter(s.id)} className={`px-3 py-1.5 rounded text-xs ${stageFilter === s.id ? `${s.bg} ${s.text}` : "bg-space-panel text-hud-muted"}`}>{s.label}</button>
         ))}
       </div>
 
@@ -242,17 +242,17 @@ export default function PipelineClient({ content }: { content: ContentItem[] }) 
                 <h2 className="text-xl font-bold">{selectedItem.title}</h2>
                 <div className="flex items-center gap-2 mt-1">
                   <div className={`w-2 h-2 rounded-full ${stageOf(selectedItem.stage).dot}`} />
-                  <span className="text-sm text-warm-muted">{stageOf(selectedItem.stage).label}</span>
-                  {selectedItem.platform && <span className="text-sm text-warm-muted">· {platformIcons[selectedItem.platform.toLowerCase()] || ""} {selectedItem.platform}</span>}
+                  <span className="text-sm text-hud-muted">{stageOf(selectedItem.stage).label}</span>
+                  {selectedItem.platform && <span className="text-sm text-hud-muted">· {platformIcons[selectedItem.platform.toLowerCase()] || ""} {selectedItem.platform}</span>}
                 </div>
               </div>
-              <button onClick={() => { setSelectedItem(null); setEditingScript(null) }} className="text-warm-muted hover:text-warm-text text-xl">×</button>
+              <button onClick={() => { setSelectedItem(null); setEditingScript(null) }} className="text-hud-muted hover:text-hud-amber text-xl">×</button>
             </div>
 
             {/* Script Section */}
             <div className="mb-4">
               <div className="flex items-center justify-between mb-2">
-                <h3 className="text-sm font-semibold text-warm-muted">Script</h3>
+                <h3 className="text-sm font-semibold text-hud-muted">Script</h3>
                 <button
                   onClick={() => {
                     if (editingScript === selectedItem.id) {
@@ -262,21 +262,21 @@ export default function PipelineClient({ content }: { content: ContentItem[] }) 
                       setScriptDraft(selectedItem.script || "")
                     }
                   }}
-                  className="text-xs text-blue-600 hover:text-blue-600"
+                  className="text-xs text-blue-400 hover:text-blue-400"
                 >
                   {editingScript === selectedItem.id ? "💾 Save" : "✏️ Edit"}
                 </button>
               </div>
               {editingScript === selectedItem.id ? (
                 <textarea
-                  className="w-full h-40 bg-cream-100 rounded p-3 text-sm text-warm-text resize-y font-mono"
+                  className="w-full h-40 bg-space-panel rounded p-3 text-sm text-hud-text resize-y font-mono"
                   value={scriptDraft}
                   onChange={(e) => setScriptDraft(e.target.value)}
                   autoFocus
                 />
               ) : (
-                <div className="bg-cream-100 rounded p-3 text-sm text-warm-text whitespace-pre-wrap min-h-[60px]">
-                  {selectedItem.script || <span className="text-warm-muted/70 italic">No script yet</span>}
+                <div className="bg-space-panel rounded p-3 text-sm text-hud-text whitespace-pre-wrap min-h-[60px]">
+                  {selectedItem.script || <span className="text-hud-muted/70 italic">No script yet</span>}
                 </div>
               )}
             </div>
@@ -284,13 +284,13 @@ export default function PipelineClient({ content }: { content: ContentItem[] }) 
             {/* Notes */}
             {selectedItem.notes && (
               <div className="mb-4">
-                <h3 className="text-sm font-semibold text-warm-muted mb-1">Notes</h3>
-                <div className="text-sm text-warm-text">{selectedItem.notes}</div>
+                <h3 className="text-sm font-semibold text-hud-muted mb-1">Notes</h3>
+                <div className="text-sm text-hud-text">{selectedItem.notes}</div>
               </div>
             )}
 
             {/* Meta */}
-            <div className="grid grid-cols-2 gap-2 text-xs text-warm-muted">
+            <div className="grid grid-cols-2 gap-2 text-xs text-hud-muted">
               {selectedItem.scheduled_date && <div>📅 Scheduled: {selectedItem.scheduled_date}</div>}
               {selectedItem.published_at && <div>✅ Published: {new Date(selectedItem.published_at).toLocaleDateString()}</div>}
               {selectedItem.created_at && <div>🕐 Created: {new Date(selectedItem.created_at).toLocaleDateString()}</div>}

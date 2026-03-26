@@ -22,10 +22,10 @@ export default function ContextSwitcher({
         <button
           key={v.id}
           onClick={() => onChange(v.id)}
-          className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+          className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
             active === v.id
-              ? "bg-warm-text text-white"
-              : "bg-cream-100 text-warm-muted hover:bg-cream-200"
+              ? "bg-hud-amber text-space-black"
+              : "bg-space-panel text-hud-muted hover:text-hud-amber border border-space-border"
           }`}
         >
           {v.label}

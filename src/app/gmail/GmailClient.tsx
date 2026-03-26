@@ -69,7 +69,7 @@ export default function GmailClient() {
       <div className="flex items-start justify-between">
         <div>
           <h1 className="text-3xl font-bold">Gmail</h1>
-          <p className="text-warm-muted text-sm mt-1">
+          <p className="text-hud-muted text-sm mt-1">
             {filtered.length} threads{unreadCount > 0 && ` — ${unreadCount} unread`}
           </p>
         </div>
@@ -77,19 +77,19 @@ export default function GmailClient() {
           <ContextSwitcher active={venture} onChange={setVenture} />
           <button
             onClick={loadThreads}
-            className="text-sm text-warm-muted hover:text-warm-text border border-cream-200 rounded-lg px-3 py-1.5 transition-colors"
+            className="text-sm text-hud-muted hover:text-hud-amber border border-space-border rounded-lg px-3 py-1.5 transition-colors"
           >
             Refresh
           </button>
         </div>
       </div>
 
-      {loading && <div className="text-warm-muted text-center py-12">Loading inbox...</div>}
+      {loading && <div className="text-hud-muted text-center py-12">Loading inbox...</div>}
 
       {error && (
-        <div className="card bg-amber-50 border-amber-200">
-          <p className="text-amber-700 text-sm">{error}</p>
-          <p className="text-amber-600 text-xs mt-1">Gmail API token may need refresh. Threads will load from cache if available.</p>
+        <div className="card bg-amber-900/30 border-space-border">
+          <p className="text-hud-amber text-sm">{error}</p>
+          <p className="text-hud-amber text-xs mt-1">Gmail API token may need refresh. Threads will load from cache if available.</p>
         </div>
       )}
 
@@ -100,14 +100,14 @@ export default function GmailClient() {
             return (
               <div
                 key={thread.id}
-                className={`flex items-start gap-3 p-4 rounded-lg transition-colors hover:bg-cream-100 ${
-                  thread.is_unread ? "bg-white" : "bg-cream-50"
+                className={`flex items-start gap-3 p-4 rounded-lg transition-colors hover:bg-space-panel ${
+                  thread.is_unread ? "bg-space-dark" : "bg-space-dark"
                 }`}
               >
                 {/* Unread dot */}
                 <div className="pt-1.5 shrink-0">
                   {thread.is_unread ? (
-                    <div className="w-2.5 h-2.5 rounded-full bg-blue-500" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-blue-400" />
                   ) : (
                     <div className="w-2.5 h-2.5" />
                   )}
@@ -116,23 +116,23 @@ export default function GmailClient() {
                 {/* Content */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className={`text-sm ${thread.is_unread ? "font-semibold text-warm-text" : "text-warm-text"}`}>
+                    <span className={`text-sm ${thread.is_unread ? "font-semibold text-hud-text" : "text-hud-text"}`}>
                       {thread.from_name || thread.from_email}
                     </span>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-cream-100 text-warm-muted capitalize">
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-space-panel text-hud-muted capitalize">
                       {ventureTag}
                     </span>
                   </div>
-                  <div className={`text-sm mt-0.5 ${thread.is_unread ? "font-medium text-warm-text" : "text-warm-muted"}`}>
+                  <div className={`text-sm mt-0.5 ${thread.is_unread ? "font-medium text-hud-text" : "text-hud-muted"}`}>
                     {thread.subject}
                   </div>
-                  <div className="text-xs text-warm-muted mt-0.5 line-clamp-1">
+                  <div className="text-xs text-hud-muted mt-0.5 line-clamp-1">
                     {thread.snippet}
                   </div>
                 </div>
 
                 {/* Date */}
-                <div className="shrink-0 text-xs text-warm-muted">
+                <div className="shrink-0 text-xs text-hud-muted">
                   {timeAgo(thread.date)}
                 </div>
               </div>
@@ -140,7 +140,7 @@ export default function GmailClient() {
           })}
 
           {filtered.length === 0 && !loading && (
-            <div className="text-center py-12 text-warm-muted">
+            <div className="text-center py-12 text-hud-muted">
               {threads.length === 0 ? "No email threads loaded" : "No threads match this filter"}
             </div>
           )}

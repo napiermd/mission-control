@@ -106,10 +106,10 @@ export default function GraphPage() {
 
   return (
     <div className="h-screen flex flex-col">
-      <div className="p-6 border-b border-cream-200">
+      <div className="p-6 border-b border-space-border">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-3xl font-bold">Knowledge Graph</h1>
-          <div className="text-sm text-warm-muted">
+          <div className="text-sm text-hud-muted">
             {filteredData.nodes.length} nodes — {filteredData.links.length} edges
           </div>
         </div>
@@ -119,25 +119,25 @@ export default function GraphPage() {
           placeholder="Filter by note title or tag..."
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          className="w-full bg-white text-warm-text px-4 py-2 rounded-lg border border-cream-200 focus:border-blue-500 focus:outline-none"
+          className="w-full bg-space-dark text-hud-text px-4 py-2 rounded-lg border border-space-border focus:border-hud-amber focus:outline-none"
         />
 
         <div className="flex gap-4 mt-4 text-sm">
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-            <span className="text-warm-muted">Hub (≥10 links)</span>
+            <div className="w-3 h-3 rounded-full bg-blue-900/300"></div>
+            <span className="text-hud-muted">Hub (≥10 links)</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-purple-500"></div>
-            <span className="text-warm-muted">Connected (5-9 links)</span>
+            <div className="w-3 h-3 rounded-full bg-purple-900/300"></div>
+            <span className="text-hud-muted">Connected (5-9 links)</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-gray-400"></div>
-            <span className="text-warm-muted">Normal (1-4 links)</span>
+            <span className="text-hud-muted">Normal (1-4 links)</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-amber-500"></div>
-            <span className="text-warm-muted">Orphan (0 links)</span>
+            <div className="w-3 h-3 rounded-full bg-hud-amber"></div>
+            <span className="text-hud-muted">Orphan (0 links)</span>
           </div>
         </div>
       </div>
@@ -152,8 +152,8 @@ export default function GraphPage() {
           linkDirectionalParticles={2}
           linkDirectionalParticleSpeed={0.005}
           onNodeClick={handleNodeClick}
-          backgroundColor="#FFFBF5"
-          linkColor={() => '#E8E0D8'}
+          backgroundColor="#0a0e17"
+          linkColor={() => '#1e293b'}
           nodeCanvasObject={(node: any, ctx, globalScale) => {
             const label = node.title
             const fontSize = 12/globalScale
@@ -165,7 +165,7 @@ export default function GraphPage() {
 
             ctx.textAlign = 'center'
             ctx.textBaseline = 'middle'
-            ctx.fillStyle = '#1A1A1A'
+            ctx.fillStyle = '#e2e8f0'
             ctx.fillText(label.substring(0, 20), node.x, node.y + node.val + fontSize)
           }}
         />
@@ -176,7 +176,7 @@ export default function GraphPage() {
               <h3 className="text-lg font-bold">{selectedNode.title}</h3>
               <button
                 onClick={() => setSelectedNode(null)}
-                className="text-warm-muted hover:text-warm-text"
+                className="text-hud-muted hover:text-hud-amber"
               >
                 ✕
               </button>
@@ -184,21 +184,21 @@ export default function GraphPage() {
 
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-warm-muted">Total Links:</span>
+                <span className="text-hud-muted">Total Links:</span>
                 <span className="font-medium">{selectedNode.total_links}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-warm-muted">Centrality:</span>
+                <span className="text-hud-muted">Centrality:</span>
                 <span className="font-medium">{selectedNode.centrality}</span>
               </div>
               {selectedNode.tags.length > 0 && (
                 <div>
-                  <div className="text-warm-muted mb-2">Tags:</div>
+                  <div className="text-hud-muted mb-2">Tags:</div>
                   <div className="flex flex-wrap gap-2">
                     {selectedNode.tags.map((tag, idx) => (
                       <span
                         key={idx}
-                        className="text-xs bg-purple-50 text-purple-600 px-2 py-1 rounded"
+                        className="text-xs bg-purple-900/30 text-purple-400 px-2 py-1 rounded"
                       >
                         #{tag}
                       </span>

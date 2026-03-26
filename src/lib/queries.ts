@@ -93,6 +93,38 @@ export async function getOpsBoardScored() {
   }).sort((a: any, b: any) => b._score - a._score)
 }
 
+export async function getFollowUps() {
+  const supabase = supabaseServer()
+  const { data, error } = await supabase
+    .from('follow_ups')
+    .select('*')
+    .eq('status', 'waiting')
+    .order('sent_at', { ascending: true })
+  if (error) return []
+  return data || []
+}
+
+export async function getLatestBrief() {
+  const supabase = supabaseServer()
+  const { data, error } = await supabase
+    .from('tars_brief_context')
+    .select('*')
+    .order('hydrated_at', { ascending: false })
+    .limit(1)
+  if (error) return null
+  return data?.[0] || null
+}
+
+export async function getTodayCalendar() {
+  const supabase = supabaseServer()
+  const { data, error } = await supabase
+    .from('mc_calendar')
+    .select('*')
+    .order('time', { ascending: true })
+  if (error) return []
+  return data || []
+}
+
 export async function getObsidianStats() {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.VERCEL_URL

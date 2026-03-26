@@ -1,23 +1,31 @@
 import './globals.css'
-import TabNavigation from '@/components/TabNavigation'
+import Link from 'next/link'
+import { format } from 'date-fns'
 
 export const metadata = {
-  title: 'Mission Control',
-  description: 'Operations Dashboard',
+  title: 'TARS // Mission Control',
+  description: 'Personal Command Center',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="bg-cream-50 text-warm-text">
+      <body className="bg-space-black text-hud-text">
         <div className="min-h-screen flex flex-col">
-          <header className="bg-white border-b border-cream-200">
-            <div className="max-w-7xl mx-auto w-full px-6 pt-4 pb-0">
-              <div className="text-xs text-warm-muted mb-1">IntuBlade Command Center</div>
+          <header className="border-b border-space-border px-6 py-3 flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-3">
+              <span className="text-hud-amber font-bold tracking-[0.3em] text-sm">T A R S</span>
+              <span className="text-space-border">//</span>
+              <span className="text-hud-muted text-xs tracking-wider uppercase">Mission Control</span>
+            </Link>
+            <div className="flex items-center gap-4">
+              <span className="text-hud-muted text-xs">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</span>
+              <Link href="/settings" className="text-hud-muted hover:text-hud-amber text-xs transition-colors">
+                [settings]
+              </Link>
             </div>
-            <TabNavigation />
           </header>
-          <main className="main-content max-w-7xl mx-auto w-full px-6 py-6">
+          <main className="main-content max-w-6xl mx-auto w-full px-6 py-6">
             {children}
           </main>
         </div>

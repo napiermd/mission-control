@@ -35,10 +35,10 @@ function formatSlackText(text: string): string {
 }
 
 const channelColors: Record<string, string> = {
-  'tars': 'bg-blue-50 text-blue-600',
-  'dev': 'bg-purple-50 text-purple-600',
-  'sales-team': 'bg-green-50 text-green-600',
-  'sales-success': 'bg-emerald-50 text-emerald-600',
+  'tars': 'bg-blue-900/30 text-blue-400',
+  'dev': 'bg-purple-900/30 text-purple-400',
+  'sales-team': 'bg-green-900/30 text-hud-green',
+  'sales-success': 'bg-emerald-900/30 text-emerald-400',
   'admin-support': 'bg-amber-50 text-amber-600',
   'admin-support-alt': 'bg-amber-50 text-amber-600',
 }
@@ -83,7 +83,7 @@ export default function SlackClient() {
       <div className="flex items-start justify-between">
         <div>
           <h1 className="text-3xl font-bold">Slack Feed</h1>
-          <p className="text-warm-muted text-sm mt-1">
+          <p className="text-hud-muted text-sm mt-1">
             {filtered.length} messages across {channels.length} channels
           </p>
         </div>
@@ -91,7 +91,7 @@ export default function SlackClient() {
           <ContextSwitcher active={venture} onChange={setVenture} />
           <button
             onClick={loadMessages}
-            className="text-sm text-warm-muted hover:text-warm-text border border-cream-200 rounded-lg px-3 py-1.5 transition-colors"
+            className="text-sm text-hud-muted hover:text-hud-amber border border-space-border rounded-lg px-3 py-1.5 transition-colors"
           >
             Refresh
           </button>
@@ -103,7 +103,7 @@ export default function SlackClient() {
         <button
           onClick={() => setChannelFilter("all")}
           className={`px-3 py-1.5 rounded text-xs font-medium ${
-            channelFilter === "all" ? "bg-blue-600 text-white" : "bg-cream-100 text-warm-muted hover:bg-cream-200"
+            channelFilter === "all" ? "bg-blue-600 text-white" : "bg-space-panel text-hud-muted hover:bg-space-panel"
           }`}
         >
           All Channels
@@ -114,8 +114,8 @@ export default function SlackClient() {
             onClick={() => setChannelFilter(ch)}
             className={`px-3 py-1.5 rounded text-xs font-medium ${
               channelFilter === ch
-                ? (channelColors[ch] || "bg-cream-200 text-warm-text")
-                : "bg-cream-100 text-warm-muted hover:bg-cream-200"
+                ? (channelColors[ch] || "bg-space-border text-hud-text")
+                : "bg-space-panel text-hud-muted hover:bg-space-panel"
             }`}
           >
             #{ch}
@@ -123,7 +123,7 @@ export default function SlackClient() {
         ))}
       </div>
 
-      {loading && <div className="text-warm-muted text-center py-12">Loading Slack feed...</div>}
+      {loading && <div className="text-hud-muted text-center py-12">Loading Slack feed...</div>}
 
       {error && (
         <div className="card bg-amber-50 border-amber-200">
@@ -134,21 +134,21 @@ export default function SlackClient() {
       {!loading && (
         <div className="space-y-2">
           {filtered.map((msg) => (
-            <div key={msg.id} className="flex gap-3 p-4 rounded-lg hover:bg-cream-100 transition-colors">
+            <div key={msg.id} className="flex gap-3 p-4 rounded-lg hover:bg-space-panel transition-colors">
               {/* Avatar placeholder */}
-              <div className="w-8 h-8 rounded bg-cream-200 shrink-0 flex items-center justify-center text-xs font-bold text-warm-muted">
+              <div className="w-8 h-8 rounded bg-space-border shrink-0 flex items-center justify-center text-xs font-bold text-hud-muted">
                 {(msg.user_name || "?")[0].toUpperCase()}
               </div>
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-semibold text-warm-text">{msg.user_name}</span>
-                  <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${channelColors[msg.channel_name] || "bg-cream-100 text-warm-muted"}`}>
+                  <span className="text-sm font-semibold text-hud-text">{msg.user_name}</span>
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${channelColors[msg.channel_name] || "bg-space-panel text-hud-muted"}`}>
                     #{msg.channel_name}
                   </span>
-                  <span className="text-[10px] text-warm-muted ml-auto">{timeAgo(msg.date)}</span>
+                  <span className="text-[10px] text-hud-muted ml-auto">{timeAgo(msg.date)}</span>
                 </div>
-                <div className="text-sm text-warm-text mt-1 whitespace-pre-wrap">
+                <div className="text-sm text-hud-text mt-1 whitespace-pre-wrap">
                   {formatSlackText(msg.text)}
                 </div>
               </div>
@@ -156,7 +156,7 @@ export default function SlackClient() {
           ))}
 
           {filtered.length === 0 && !loading && (
-            <div className="text-center py-12 text-warm-muted">
+            <div className="text-center py-12 text-hud-muted">
               {messages.length === 0 ? "No Slack messages loaded" : "No messages match this filter"}
             </div>
           )}

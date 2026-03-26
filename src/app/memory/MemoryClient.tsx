@@ -12,13 +12,13 @@ type Memory = {
 }
 
 const typeColors: Record<string, string> = {
-  DAILY: "text-blue-600 bg-blue-50",
-  PREFERENCE: "text-purple-600 bg-purple-50",
-  LEARNING: "text-green-600 bg-green-50",
-  DECISION: "text-amber-600 bg-amber-50",
-  PERSON: "text-pink-600 bg-pink-50",
-  PROJECT: "text-orange-600 bg-orange-50",
-  TODO: "text-cyan-600 bg-cyan-50",
+  DAILY: "text-blue-400 bg-blue-900/30",
+  PREFERENCE: "text-purple-400 bg-purple-900/30",
+  LEARNING: "text-green-400 bg-green-900/30",
+  DECISION: "text-amber-400 bg-amber-900/30",
+  PERSON: "text-pink-400 bg-pink-900/30",
+  PROJECT: "text-orange-400 bg-orange-900/30",
+  TODO: "text-cyan-400 bg-cyan-900/30",
 }
 
 export default function MemoryClient({ memories }: { memories: Memory[] }) {
@@ -58,18 +58,18 @@ export default function MemoryClient({ memories }: { memories: Memory[] }) {
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-3xl font-bold">Memory Bank</h1>
-          <p className="text-warm-muted text-sm mt-1">{filtered.length} of {memories.length} memories</p>
+          <p className="text-hud-muted text-sm mt-1">{filtered.length} of {memories.length} memories</p>
         </div>
         <div className="flex gap-2">
           <button
             onClick={() => setView("grid")}
-            className={`px-3 py-1.5 rounded text-sm ${view === "grid" ? "bg-blue-600 text-white" : "bg-cream-100 text-warm-muted"}`}
+            className={`px-3 py-1.5 rounded text-sm ${view === "grid" ? "bg-hud-amber text-space-black" : "bg-space-panel text-hud-muted"}`}
           >
             Grid
           </button>
           <button
             onClick={() => setView("timeline")}
-            className={`px-3 py-1.5 rounded text-sm ${view === "timeline" ? "bg-blue-600 text-white" : "bg-cream-100 text-warm-muted"}`}
+            className={`px-3 py-1.5 rounded text-sm ${view === "timeline" ? "bg-hud-amber text-space-black" : "bg-space-panel text-hud-muted"}`}
           >
             Timeline
           </button>
@@ -89,7 +89,7 @@ export default function MemoryClient({ memories }: { memories: Memory[] }) {
           <div className="flex gap-2 flex-wrap">
             <button
               onClick={() => setTypeFilter("ALL")}
-              className={`px-3 py-1.5 rounded text-xs ${typeFilter === "ALL" ? "bg-blue-600 text-white" : "bg-cream-100 text-warm-muted hover:bg-cream-200"}`}
+              className={`px-3 py-1.5 rounded text-xs ${typeFilter === "ALL" ? "bg-hud-amber text-space-black" : "bg-space-panel text-hud-muted hover:bg-space-panel"}`}
             >
               All
             </button>
@@ -99,8 +99,8 @@ export default function MemoryClient({ memories }: { memories: Memory[] }) {
                 onClick={() => setTypeFilter(type)}
                 className={`px-3 py-1.5 rounded text-xs ${
                   typeFilter === type
-                    ? (typeColors[type] || "bg-cream-200 text-warm-text")
-                    : "bg-cream-100 text-warm-muted hover:bg-cream-200"
+                    ? (typeColors[type] || "bg-space-border text-hud-text")
+                    : "bg-space-panel text-hud-muted hover:bg-space-panel"
                 }`}
               >
                 {type} ({memories.filter((m) => m.type === type).length})
@@ -114,19 +114,19 @@ export default function MemoryClient({ memories }: { memories: Memory[] }) {
       {view === "grid" && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {filtered.map((memory) => (
-            <div key={memory.id} className="card hover:border-cream-200 transition-colors">
+            <div key={memory.id} className="card hover:border-space-border transition-colors">
               <div className="flex items-start justify-between mb-3">
-                <span className={`px-2 py-1 rounded text-xs ${typeColors[memory.type] || "text-warm-muted bg-cream-100"}`}>
+                <span className={`px-2 py-1 rounded text-xs ${typeColors[memory.type] || "text-hud-muted bg-space-panel"}`}>
                   {memory.type}
                 </span>
                 {memory.category && (
-                  <span className="text-xs text-warm-muted">#{memory.category}</span>
+                  <span className="text-xs text-hud-muted">#{memory.category}</span>
                 )}
               </div>
-              <p className="text-warm-text text-sm">{memory.content}</p>
-              <div className="flex justify-between items-center mt-4 pt-3 border-t border-cream-200">
-                <span className="text-xs text-warm-muted">Source: {memory.source || "—"}</span>
-                <span className="text-xs text-warm-muted">{memory.date}</span>
+              <p className="text-hud-text text-sm">{memory.content}</p>
+              <div className="flex justify-between items-center mt-4 pt-3 border-t border-space-border">
+                <span className="text-xs text-hud-muted">Source: {memory.source || "—"}</span>
+                <span className="text-xs text-hud-muted">{memory.date}</span>
               </div>
             </div>
           ))}
@@ -139,20 +139,20 @@ export default function MemoryClient({ memories }: { memories: Memory[] }) {
           {grouped.map(([date, items]) => (
             <div key={date}>
               <div className="flex items-center gap-3 mb-3">
-                <div className="text-sm font-semibold text-warm-text">{date}</div>
-                <div className="flex-1 h-px bg-cream-200" />
-                <div className="text-xs text-warm-muted">{items.length}</div>
+                <div className="text-sm font-semibold text-hud-text">{date}</div>
+                <div className="flex-1 h-px bg-space-border" />
+                <div className="text-xs text-hud-muted">{items.length}</div>
               </div>
-              <div className="space-y-2 ml-4 border-l-2 border-cream-200 pl-4">
+              <div className="space-y-2 ml-4 border-l-2 border-space-border pl-4">
                 {items.map((m) => (
                   <div key={m.id} className="card">
                     <div className="flex items-center gap-2 mb-2">
-                      <span className={`px-2 py-0.5 rounded text-xs ${typeColors[m.type] || "text-warm-muted bg-cream-100"}`}>
+                      <span className={`px-2 py-0.5 rounded text-xs ${typeColors[m.type] || "text-hud-muted bg-space-panel"}`}>
                         {m.type}
                       </span>
-                      {m.category && <span className="text-xs text-warm-muted">#{m.category}</span>}
+                      {m.category && <span className="text-xs text-hud-muted">#{m.category}</span>}
                     </div>
-                    <p className="text-sm text-warm-text">{m.content}</p>
+                    <p className="text-sm text-hud-text">{m.content}</p>
                   </div>
                 ))}
               </div>
@@ -163,7 +163,7 @@ export default function MemoryClient({ memories }: { memories: Memory[] }) {
 
       {filtered.length === 0 && (
         <div className="card text-center py-16">
-          <div className="text-warm-muted">{query || typeFilter !== "ALL" ? "No matching memories" : "No memories yet"}</div>
+          <div className="text-hud-muted">{query || typeFilter !== "ALL" ? "No matching memories" : "No memories yet"}</div>
         </div>
       )}
     </div>

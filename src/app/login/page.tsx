@@ -35,10 +35,10 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-cream-50 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg border border-cream-200 max-w-sm w-full">
-        <h1 className="text-2xl font-bold text-warm-text mb-2">Mission Control</h1>
-        <p className="text-warm-muted text-sm mb-6">Enter password to access</p>
+    <div className="min-h-screen bg-space-dark flex items-center justify-center">
+      <div className="bg-space-dark p-8 rounded-lg border border-space-border max-w-sm w-full">
+        <h1 className="text-2xl font-bold text-hud-text mb-2">Mission Control</h1>
+        <p className="text-hud-muted text-sm mb-6">Enter password to access</p>
 
         <div className="space-y-4">
           <input
@@ -47,15 +47,15 @@ export default function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Password"
-            className="w-full px-4 py-3 bg-white border border-cream-200 rounded-lg text-warm-text placeholder-warm-muted focus:outline-none focus:border-blue-500"
+            className="w-full px-4 py-3 bg-space-dark border border-space-border rounded-lg text-hud-text placeholder-hud-muted focus:outline-none focus:border-hud-amber"
           />
 
-          {error && <p className="text-red-600 text-sm">{error}</p>}
+          {error && <p className="text-red-400 text-sm">{error}</p>}
 
           <button
             type="button"
             onClick={handleLogin}
-            className="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-3 rounded-lg transition-colors"
+            className="w-full bg-blue-600 hover:bg-blue-900/300 text-white font-medium py-3 rounded-lg transition-colors"
           >
             Access Dashboard
           </button>

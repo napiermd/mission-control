@@ -31,10 +31,10 @@ export default async function SettingsPage() {
   ]
 
   const statusDots: Record<string, string> = {
-    active: "bg-green-500",
-    pending: "bg-amber-500",
-    error: "bg-red-500",
-    inactive: "bg-warm-muted/40",
+    active: "bg-hud-green",
+    pending: "bg-hud-amber",
+    error: "bg-hud-red",
+    inactive: "bg-space-border",
   }
 
   const agents = [
@@ -61,7 +61,7 @@ export default async function SettingsPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold">Settings</h1>
-        <p className="text-warm-muted text-sm mt-1">System configuration, integrations, and cron management</p>
+        <p className="text-hud-muted text-sm mt-1">System configuration, integrations, and cron management</p>
       </div>
 
       {/* Sync Status */}
@@ -69,11 +69,11 @@ export default async function SettingsPage() {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-lg font-semibold">Sync Status</h2>
-            <p className="text-xs text-warm-muted mt-1">
+            <p className="text-xs text-hud-muted mt-1">
               Last sync: {lastSync ? new Date(lastSync).toLocaleString() : "Never"}
             </p>
           </div>
-          <div className={`w-3 h-3 rounded-full ${lastSync ? "bg-green-500" : "bg-red-500"}`} />
+          <div className={`w-3 h-3 rounded-full ${lastSync ? "bg-hud-green" : "bg-hud-red"}`} />
         </div>
       </div>
 
@@ -82,11 +82,11 @@ export default async function SettingsPage() {
         <h2 className="text-lg font-semibold mb-4">Integrations</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {integrations.map((int) => (
-            <div key={int.name} className="p-3 bg-cream-100 rounded-lg flex items-center gap-3">
-              <div className={`w-2.5 h-2.5 rounded-full shrink-0 ${statusDots[int.status] || "bg-warm-muted/40"}`} />
+            <div key={int.name} className="p-3 bg-space-panel rounded-lg flex items-center gap-3">
+              <div className={`w-2.5 h-2.5 rounded-full shrink-0 ${statusDots[int.status] || "bg-space-border"}`} />
               <div>
                 <div className="text-sm font-medium">{int.name}</div>
-                <div className="text-[10px] text-warm-muted">{int.detail}</div>
+                <div className="text-[10px] text-hud-muted">{int.detail}</div>
               </div>
             </div>
           ))}
@@ -99,7 +99,7 @@ export default async function SettingsPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-xs text-warm-muted border-b border-cream-200">
+              <tr className="text-left text-xs text-hud-muted border-b border-space-border">
                 <th className="pb-2">Agent</th>
                 <th className="pb-2">Session Model</th>
                 <th className="pb-2">Default Model</th>
@@ -107,10 +107,10 @@ export default async function SettingsPage() {
             </thead>
             <tbody>
               {agents.map((a) => (
-                <tr key={a.id} className="border-b border-cream-100">
-                  <td className="py-2 font-medium">{a.name} <span className="text-warm-muted text-xs">({a.id})</span></td>
-                  <td className="py-2 text-xs text-warm-muted">{a.model}</td>
-                  <td className="py-2 text-xs text-warm-muted">{a.default}</td>
+                <tr key={a.id} className="border-b border-space-border">
+                  <td className="py-2 font-medium">{a.name} <span className="text-hud-muted text-xs">({a.id})</span></td>
+                  <td className="py-2 text-xs text-hud-muted">{a.model}</td>
+                  <td className="py-2 text-xs text-hud-muted">{a.default}</td>
                 </tr>
               ))}
             </tbody>
@@ -123,17 +123,17 @@ export default async function SettingsPage() {
         <h2 className="text-lg font-semibold mb-4">Cron Jobs</h2>
         <div className="space-y-2">
           {cronStats.map((cron) => (
-            <div key={cron.name} className="flex items-center gap-3 p-3 bg-cream-100 rounded-lg">
-              <div className={`w-2 h-2 rounded-full shrink-0 ${cron.status === "active" ? "bg-green-500" : cron.status === "error" ? "bg-red-500" : "bg-warm-muted/40"}`} />
+            <div key={cron.name} className="flex items-center gap-3 p-3 bg-space-panel rounded-lg">
+              <div className={`w-2 h-2 rounded-full shrink-0 ${cron.status === "active" ? "bg-hud-green" : cron.status === "error" ? "bg-hud-red" : "bg-space-border"}`} />
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-medium">{cron.name}</div>
-                <div className="text-[10px] text-warm-muted">{cron.type} · {cron.interval}</div>
+                <div className="text-[10px] text-hud-muted">{cron.type} · {cron.interval}</div>
               </div>
-              <div className="text-[10px] text-warm-muted shrink-0">{cron.tokens}</div>
+              <div className="text-[10px] text-hud-muted shrink-0">{cron.tokens}</div>
             </div>
           ))}
         </div>
-        <p className="text-[10px] text-warm-muted/70 mt-3">
+        <p className="text-[10px] text-hud-muted/70 mt-3">
           78 total cron jobs. High-frequency monitors use 2-layer pattern (bash pre-check → model only on alert).
         </p>
       </div>
@@ -142,25 +142,25 @@ export default async function SettingsPage() {
       <div className="card">
         <h2 className="text-lg font-semibold mb-3">Architecture</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-          <div className="p-3 bg-cream-100 rounded-lg">
-            <div className="font-medium text-warm-text">Runtime</div>
-            <div className="text-warm-muted mt-1">OpenClaw 2026.2.15</div>
-            <div className="text-warm-muted">Mac Mini (arm64)</div>
+          <div className="p-3 bg-space-panel rounded-lg">
+            <div className="font-medium text-hud-text">Runtime</div>
+            <div className="text-hud-muted mt-1">OpenClaw 2026.2.15</div>
+            <div className="text-hud-muted">Mac Mini (arm64)</div>
           </div>
-          <div className="p-3 bg-cream-100 rounded-lg">
-            <div className="font-medium text-warm-text">Gateway</div>
-            <div className="text-warm-muted mt-1">Port 47382</div>
-            <div className="text-warm-muted">Always-on daemon</div>
+          <div className="p-3 bg-space-panel rounded-lg">
+            <div className="font-medium text-hud-text">Gateway</div>
+            <div className="text-hud-muted mt-1">Port 47382</div>
+            <div className="text-hud-muted">Always-on daemon</div>
           </div>
-          <div className="p-3 bg-cream-100 rounded-lg">
-            <div className="font-medium text-warm-text">Database</div>
-            <div className="text-warm-muted mt-1">Supabase (Postgres)</div>
-            <div className="text-warm-muted">befiquqsnvktgtwfyzgw</div>
+          <div className="p-3 bg-space-panel rounded-lg">
+            <div className="font-medium text-hud-text">Database</div>
+            <div className="text-hud-muted mt-1">Supabase (Postgres)</div>
+            <div className="text-hud-muted">befiquqsnvktgtwfyzgw</div>
           </div>
-          <div className="p-3 bg-cream-100 rounded-lg">
-            <div className="font-medium text-warm-text">Dashboard</div>
-            <div className="text-warm-muted mt-1">Next.js 16 + Vercel</div>
-            <div className="text-warm-muted">Tailwind CSS</div>
+          <div className="p-3 bg-space-panel rounded-lg">
+            <div className="font-medium text-hud-text">Dashboard</div>
+            <div className="text-hud-muted mt-1">Next.js 16 + Vercel</div>
+            <div className="text-hud-muted">Tailwind CSS</div>
           </div>
         </div>
       </div>
