@@ -35,11 +35,11 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 flex items-center justify-center">
-      <div className="bg-gray-900 p-8 rounded-lg border border-gray-800 max-w-sm w-full">
-        <h1 className="text-2xl font-bold text-white mb-2">Mission Control</h1>
-        <p className="text-gray-400 text-sm mb-6">Enter password to access</p>
-        
+    <div className="min-h-screen bg-cream-50 flex items-center justify-center">
+      <div className="bg-white p-8 rounded-lg border border-cream-200 max-w-sm w-full">
+        <h1 className="text-2xl font-bold text-warm-text mb-2">Mission Control</h1>
+        <p className="text-warm-muted text-sm mb-6">Enter password to access</p>
+
         <div className="space-y-4">
           <input
             type="password"
@@ -47,11 +47,11 @@ export default function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Password"
-            className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+            className="w-full px-4 py-3 bg-white border border-cream-200 rounded-lg text-warm-text placeholder-warm-muted focus:outline-none focus:border-blue-500"
           />
-          
-          {error && <p className="text-red-400 text-sm">{error}</p>}
-          
+
+          {error && <p className="text-red-600 text-sm">{error}</p>}
+
           <button
             type="button"
             onClick={handleLogin}

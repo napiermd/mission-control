@@ -31,9 +31,9 @@ const statusDot: Record<string, string> = {
 }
 
 const statusBadge: Record<string, string> = {
-  WORKING: "text-green-400 bg-green-900/50",
-  IDLE: "text-gray-400 bg-gray-700",
-  OFFLINE: "text-gray-500 bg-gray-800",
+  WORKING: "text-green-600 bg-green-50",
+  IDLE: "text-warm-muted bg-cream-100",
+  OFFLINE: "text-warm-muted bg-cream-100",
 }
 
 const agentSkills: Record<string, { skills: string[]; tools: string[]; captures: string }> = {
@@ -83,8 +83,8 @@ export default function TeamClient({ team, learnings }: { team: TeamMember[]; le
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">🤖 AI Team</h1>
-          <p className="text-gray-400 text-sm mt-1">{team.length} agents</p>
+          <h1 className="text-3xl font-bold">AI Team</h1>
+          <p className="text-warm-muted text-sm mt-1">{team.length} agents</p>
         </div>
       </div>
 
@@ -92,15 +92,15 @@ export default function TeamClient({ team, learnings }: { team: TeamMember[]; le
       <div className="grid grid-cols-3 gap-3">
         <div className="card flex items-center gap-3">
           <div className="w-3 h-3 rounded-full bg-green-400" />
-          <div><div className="text-xs text-gray-400">Working</div><div className="text-2xl font-bold text-green-400">{workingCount}</div></div>
+          <div><div className="text-xs text-warm-muted">Working</div><div className="text-2xl font-bold text-green-600">{workingCount}</div></div>
         </div>
         <div className="card flex items-center gap-3">
           <div className="w-3 h-3 rounded-full bg-gray-400" />
-          <div><div className="text-xs text-gray-400">Idle</div><div className="text-2xl font-bold text-gray-400">{idleCount}</div></div>
+          <div><div className="text-xs text-warm-muted">Idle</div><div className="text-2xl font-bold text-warm-muted">{idleCount}</div></div>
         </div>
         <div className="card flex items-center gap-3">
           <div className="w-3 h-3 rounded-full bg-gray-600" />
-          <div><div className="text-xs text-gray-400">Offline</div><div className="text-2xl font-bold text-gray-500">{offlineCount}</div></div>
+          <div><div className="text-xs text-warm-muted">Offline</div><div className="text-2xl font-bold text-warm-muted">{offlineCount}</div></div>
         </div>
       </div>
 
@@ -110,9 +110,9 @@ export default function TeamClient({ team, learnings }: { team: TeamMember[]; le
         return (
           <div key={dept}>
             <div className="flex items-center gap-3 mb-3">
-              <h2 className="text-sm font-semibold text-gray-400 uppercase">{dept}</h2>
-              <div className="flex-1 h-px bg-gray-700" />
-              <span className="text-xs text-gray-500">{deptMembers.length}</span>
+              <h2 className="text-sm font-semibold text-warm-muted uppercase">{dept}</h2>
+              <div className="flex-1 h-px bg-cream-200" />
+              <span className="text-xs text-warm-muted">{deptMembers.length}</span>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
               {deptMembers.map((member) => {
@@ -123,7 +123,7 @@ export default function TeamClient({ team, learnings }: { team: TeamMember[]; le
                 return (
                   <div
                     key={member.id}
-                    className="card hover:border-gray-600 transition-colors cursor-pointer"
+                    className="card hover:border-cream-200 transition-colors cursor-pointer"
                     onClick={() => setExpandedId(isExpanded ? null : member.id)}
                   >
                     {/* Header */}
@@ -131,38 +131,38 @@ export default function TeamClient({ team, learnings }: { team: TeamMember[]; le
                       <div className={`w-3 h-3 rounded-full shrink-0 ${statusDot[member.status || "IDLE"]}`} />
                       <div className="flex-1">
                         <div className="font-bold text-lg">{member.name}</div>
-                        <div className="text-sm text-gray-400">{member.role}</div>
+                        <div className="text-sm text-warm-muted">{member.role}</div>
                       </div>
-                      <span className={`px-2 py-1 rounded text-xs ${statusBadge[member.status || "IDLE"] || "text-gray-400 bg-gray-700"}`}>
+                      <span className={`px-2 py-1 rounded text-xs ${statusBadge[member.status || "IDLE"] || "text-warm-muted bg-cream-100"}`}>
                         {member.status || "IDLE"}
                       </span>
                     </div>
 
                     {/* Current Task */}
                     {member.current_task && (
-                      <div className="mt-3 p-2 bg-gray-800 rounded text-sm text-gray-300">
+                      <div className="mt-3 p-2 bg-cream-100 rounded text-sm text-warm-text">
                         → {member.current_task}
                       </div>
                     )}
 
                     {/* Responsibilities */}
                     {member.responsibilities && (
-                      <div className="mt-2 text-xs text-gray-500">{member.responsibilities}</div>
+                      <div className="mt-2 text-xs text-warm-muted">{member.responsibilities}</div>
                     )}
 
                     {/* Expand indicator */}
-                    <div className="text-[10px] text-gray-600 mt-2">{isExpanded ? "▾ Click to collapse" : "▸ Click for details"}</div>
+                    <div className="text-[10px] text-warm-muted/70 mt-2">{isExpanded ? "▾ Click to collapse" : "▸ Click for details"}</div>
 
                     {/* Expanded Section */}
                     {isExpanded && (
-                      <div className="mt-4 pt-4 border-t border-gray-700 space-y-4">
+                      <div className="mt-4 pt-4 border-t border-cream-200 space-y-4">
                         {/* Skills */}
                         {skills.skills.length > 0 && (
                           <div>
-                            <div className="text-xs font-semibold text-gray-400 uppercase mb-2">Skills</div>
+                            <div className="text-xs font-semibold text-warm-muted uppercase mb-2">Skills</div>
                             <div className="flex flex-wrap gap-1">
                               {skills.skills.map((s) => (
-                                <span key={s} className="text-[10px] px-2 py-1 bg-gray-800 rounded text-gray-300">{s}</span>
+                                <span key={s} className="text-[10px] px-2 py-1 bg-cream-100 rounded text-warm-text">{s}</span>
                               ))}
                             </div>
                           </div>
@@ -171,10 +171,10 @@ export default function TeamClient({ team, learnings }: { team: TeamMember[]; le
                         {/* Tools */}
                         {skills.tools.length > 0 && (
                           <div>
-                            <div className="text-xs font-semibold text-gray-400 uppercase mb-2">Tools</div>
+                            <div className="text-xs font-semibold text-warm-muted uppercase mb-2">Tools</div>
                             <div className="flex flex-wrap gap-1">
                               {skills.tools.map((t) => (
-                                <span key={t} className="text-[10px] px-2 py-1 bg-blue-900/30 rounded text-blue-300">{t}</span>
+                                <span key={t} className="text-[10px] px-2 py-1 bg-blue-50 rounded text-blue-600">{t}</span>
                               ))}
                             </div>
                           </div>
@@ -183,20 +183,20 @@ export default function TeamClient({ team, learnings }: { team: TeamMember[]; le
                         {/* Captures */}
                         {skills.captures && (
                           <div>
-                            <div className="text-xs font-semibold text-gray-400 uppercase mb-1">Captures</div>
-                            <div className="text-xs text-gray-500">{skills.captures}</div>
+                            <div className="text-xs font-semibold text-warm-muted uppercase mb-1">Captures</div>
+                            <div className="text-xs text-warm-muted">{skills.captures}</div>
                           </div>
                         )}
 
                         {/* Recent Work */}
                         {agentLearnings.length > 0 && (
                           <div>
-                            <div className="text-xs font-semibold text-gray-400 uppercase mb-2">Recent Work</div>
+                            <div className="text-xs font-semibold text-warm-muted uppercase mb-2">Recent Work</div>
                             <div className="space-y-1">
                               {agentLearnings.map((l) => (
-                                <div key={l.id} className="text-xs p-2 bg-gray-800 rounded">
-                                  <span className="text-gray-500">{new Date(l.created_at).toLocaleDateString()}</span>{" "}
-                                  <span className="text-gray-300">{l.title || l.content.substring(0, 80)}</span>
+                                <div key={l.id} className="text-xs p-2 bg-cream-100 rounded">
+                                  <span className="text-warm-muted">{new Date(l.created_at).toLocaleDateString()}</span>{" "}
+                                  <span className="text-warm-text">{l.title || l.content.substring(0, 80)}</span>
                                 </div>
                               ))}
                             </div>
@@ -205,19 +205,19 @@ export default function TeamClient({ team, learnings }: { team: TeamMember[]; le
 
                         {/* Performance */}
                         <div>
-                          <div className="text-xs font-semibold text-gray-400 uppercase mb-2">Performance</div>
+                          <div className="text-xs font-semibold text-warm-muted uppercase mb-2">Performance</div>
                           <div className="grid grid-cols-3 gap-2">
-                            <div className="p-2 bg-gray-800 rounded text-center">
-                              <div className="text-lg font-bold text-green-400">{agentLearnings.length}</div>
-                              <div className="text-[10px] text-gray-500">Learnings</div>
+                            <div className="p-2 bg-cream-100 rounded text-center">
+                              <div className="text-lg font-bold text-green-600">{agentLearnings.length}</div>
+                              <div className="text-[10px] text-warm-muted">Learnings</div>
                             </div>
-                            <div className="p-2 bg-gray-800 rounded text-center">
-                              <div className="text-lg font-bold text-blue-400">{agentLearnings.filter((l) => l.type === "ERROR_FIX").length}</div>
-                              <div className="text-[10px] text-gray-500">Fixes</div>
+                            <div className="p-2 bg-cream-100 rounded text-center">
+                              <div className="text-lg font-bold text-blue-600">{agentLearnings.filter((l) => l.type === "ERROR_FIX").length}</div>
+                              <div className="text-[10px] text-warm-muted">Fixes</div>
                             </div>
-                            <div className="p-2 bg-gray-800 rounded text-center">
-                              <div className="text-lg font-bold text-purple-400">{agentLearnings.filter((l) => l.type === "DECISION").length}</div>
-                              <div className="text-[10px] text-gray-500">Decisions</div>
+                            <div className="p-2 bg-cream-100 rounded text-center">
+                              <div className="text-lg font-bold text-purple-600">{agentLearnings.filter((l) => l.type === "DECISION").length}</div>
+                              <div className="text-[10px] text-warm-muted">Decisions</div>
                             </div>
                           </div>
                         </div>

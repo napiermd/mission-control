@@ -15,12 +15,12 @@ type CalEvent = {
 type ViewMode = "month" | "week" | "day"
 
 const categoryColors: Record<string, { bg: string; text: string; dot: string }> = {
-  blue: { bg: "bg-blue-900/40", text: "text-blue-300", dot: "bg-blue-400" },
-  green: { bg: "bg-green-900/40", text: "text-green-300", dot: "bg-green-400" },
-  purple: { bg: "bg-purple-900/40", text: "text-purple-300", dot: "bg-purple-400" },
-  yellow: { bg: "bg-yellow-900/40", text: "text-yellow-300", dot: "bg-yellow-400" },
-  red: { bg: "bg-red-900/40", text: "text-red-300", dot: "bg-red-400" },
-  gray: { bg: "bg-gray-800", text: "text-gray-300", dot: "bg-gray-400" },
+  blue: { bg: "bg-blue-50", text: "text-blue-600", dot: "bg-blue-400" },
+  green: { bg: "bg-green-50", text: "text-green-600", dot: "bg-green-400" },
+  purple: { bg: "bg-purple-50", text: "text-purple-600", dot: "bg-purple-400" },
+  yellow: { bg: "bg-amber-50", text: "text-amber-600", dot: "bg-yellow-400" },
+  red: { bg: "bg-red-50", text: "text-red-600", dot: "bg-red-400" },
+  gray: { bg: "bg-cream-100", text: "text-warm-muted", dot: "bg-gray-400" },
 }
 
 function getColor(c: string | null) {
@@ -108,7 +108,7 @@ export default function CalendarClient({ events }: { events: CalEvent[] }) {
       <div>
         <div className="grid grid-cols-7 gap-px mb-1">
           {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => (
-            <div key={d} className="text-center text-xs text-gray-500 py-2">{d}</div>
+            <div key={d} className="text-center text-xs text-warm-muted py-2">{d}</div>
           ))}
         </div>
         <div className="grid grid-cols-7 gap-px">
@@ -118,7 +118,7 @@ export default function CalendarClient({ events }: { events: CalEvent[] }) {
             return (
               <div
                 key={i}
-                className={`min-h-[90px] p-1.5 rounded ${cell.day ? "bg-gray-800/50 hover:bg-gray-800" : "bg-transparent"} ${isToday ? "ring-1 ring-blue-500" : ""} cursor-pointer transition-colors`}
+                className={`min-h-[90px] p-1.5 rounded ${cell.day ? "bg-cream-50 hover:bg-cream-100" : "bg-transparent"} ${isToday ? "ring-1 ring-blue-400" : ""} cursor-pointer transition-colors`}
                 onClick={() => {
                   if (cell.date) {
                     setCurrentDate(cell.date)
@@ -128,7 +128,7 @@ export default function CalendarClient({ events }: { events: CalEvent[] }) {
               >
                 {cell.day && (
                   <>
-                    <div className={`text-xs mb-1 ${isToday ? "text-blue-400 font-bold" : "text-gray-400"}`}>{cell.day}</div>
+                    <div className={`text-xs mb-1 ${isToday ? "text-blue-600 font-bold" : "text-warm-muted"}`}>{cell.day}</div>
                     <div className="space-y-0.5">
                       {dayEvents.slice(0, 3).map((e) => {
                         const c = getColor(e.color)
@@ -144,7 +144,7 @@ export default function CalendarClient({ events }: { events: CalEvent[] }) {
                         )
                       })}
                       {dayEvents.length > 3 && (
-                        <div className="text-[9px] text-gray-500">+{dayEvents.length - 3} more</div>
+                        <div className="text-[9px] text-warm-muted">+{dayEvents.length - 3} more</div>
                       )}
                     </div>
                   </>
@@ -170,26 +170,26 @@ export default function CalendarClient({ events }: { events: CalEvent[] }) {
       <div className="overflow-x-auto">
         <div className="grid grid-cols-8 gap-px min-w-[700px]">
           {/* Header */}
-          <div className="p-2 text-xs text-gray-500" />
+          <div className="p-2 text-xs text-warm-muted" />
           {days.map((d) => {
             const isToday = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}` === todayStr
             return (
-              <div key={d.toISOString()} className={`p-2 text-center ${isToday ? "bg-blue-900/30 rounded" : ""}`}>
-                <div className="text-xs text-gray-500">{d.toLocaleDateString("en-US", { weekday: "short" })}</div>
-                <div className={`text-sm font-bold ${isToday ? "text-blue-400" : "text-gray-300"}`}>{d.getDate()}</div>
+              <div key={d.toISOString()} className={`p-2 text-center ${isToday ? "bg-blue-50 rounded" : ""}`}>
+                <div className="text-xs text-warm-muted">{d.toLocaleDateString("en-US", { weekday: "short" })}</div>
+                <div className={`text-sm font-bold ${isToday ? "text-blue-600" : "text-warm-text"}`}>{d.getDate()}</div>
               </div>
             )
           })}
           {/* Time rows */}
           {HOURS.map((hour) => (
             <>
-              <div key={`h-${hour}`} className="p-1 text-[10px] text-gray-600 text-right pr-2 border-t border-gray-800">
+              <div key={`h-${hour}`} className="p-1 text-[10px] text-warm-muted/70 text-right pr-2 border-t border-cream-200">
                 {hour > 12 ? `${hour - 12}pm` : hour === 12 ? "12pm" : `${hour}am`}
               </div>
               {days.map((d) => {
                 const dayEvts = eventsForDate(d).filter((e) => parseHour(e.time) === hour)
                 return (
-                  <div key={`${d.toISOString()}-${hour}`} className="border-t border-gray-800 min-h-[36px] p-0.5">
+                  <div key={`${d.toISOString()}-${hour}`} className="border-t border-cream-200 min-h-[36px] p-0.5">
                     {dayEvts.map((e) => {
                       const c = getColor(e.color)
                       return (
@@ -219,19 +219,19 @@ export default function CalendarClient({ events }: { events: CalEvent[] }) {
 
     return (
       <div>
-        <div className={`text-center mb-4 ${isToday ? "text-blue-400" : "text-gray-300"}`}>
+        <div className={`text-center mb-4 ${isToday ? "text-blue-600" : "text-warm-text"}`}>
           <div className="text-2xl font-bold">{currentDate.getDate()}</div>
-          <div className="text-sm text-gray-400">{currentDate.toLocaleDateString("en-US", { weekday: "long", month: "long", year: "numeric" })}</div>
+          <div className="text-sm text-warm-muted">{currentDate.toLocaleDateString("en-US", { weekday: "long", month: "long", year: "numeric" })}</div>
         </div>
         <div className="space-y-px">
           {HOURS.map((hour) => {
             const hourEvts = dayEvts.filter((e) => parseHour(e.time) === hour)
             return (
               <div key={hour} className="flex gap-2 min-h-[48px]">
-                <div className="w-16 text-right text-xs text-gray-600 pt-1 shrink-0">
+                <div className="w-16 text-right text-xs text-warm-muted/70 pt-1 shrink-0">
                   {hour > 12 ? `${hour - 12}:00 PM` : hour === 12 ? "12:00 PM" : `${hour}:00 AM`}
                 </div>
-                <div className="flex-1 border-t border-gray-800 pt-1">
+                <div className="flex-1 border-t border-cream-200 pt-1">
                   {hourEvts.map((e) => {
                     const c = getColor(e.color)
                     return (
@@ -254,7 +254,7 @@ export default function CalendarClient({ events }: { events: CalEvent[] }) {
         {/* All day events */}
         {dayEvts.filter((e) => !parseHour(e.time)).length > 0 && (
           <div className="mt-6 card">
-            <h3 className="text-sm font-semibold text-gray-400 mb-2">All Day / Unscheduled</h3>
+            <h3 className="text-sm font-semibold text-warm-muted mb-2">All Day / Unscheduled</h3>
             <div className="space-y-2">
               {dayEvts.filter((e) => !parseHour(e.time)).map((e) => {
                 const c = getColor(e.color)
@@ -277,14 +277,14 @@ export default function CalendarClient({ events }: { events: CalEvent[] }) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">📅 Calendar</h1>
-          <p className="text-gray-400 text-sm mt-1">{events.length} events · {events.filter((e) => e.recurrence).length} recurring</p>
+          <h1 className="text-3xl font-bold">Calendar</h1>
+          <p className="text-warm-muted text-sm mt-1">{events.length} events · {events.filter((e) => e.recurrence).length} recurring</p>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={() => setCurrentDate(new Date())} className="px-3 py-1.5 rounded text-xs bg-gray-800 text-gray-400 hover:bg-gray-700">Today</button>
+          <button onClick={() => setCurrentDate(new Date())} className="px-3 py-1.5 rounded text-xs bg-cream-100 text-warm-muted hover:bg-cream-200">Today</button>
           <div className="flex gap-1">
             {(["month", "week", "day"] as ViewMode[]).map((v) => (
-              <button key={v} onClick={() => setView(v)} className={`px-3 py-1.5 rounded text-xs capitalize ${view === v ? "bg-blue-600 text-white" : "bg-gray-800 text-gray-400 hover:bg-gray-700"}`}>{v}</button>
+              <button key={v} onClick={() => setView(v)} className={`px-3 py-1.5 rounded text-xs capitalize ${view === v ? "bg-blue-600 text-white" : "bg-cream-100 text-warm-muted hover:bg-cream-200"}`}>{v}</button>
             ))}
           </div>
         </div>
@@ -292,13 +292,13 @@ export default function CalendarClient({ events }: { events: CalEvent[] }) {
 
       {/* Navigation */}
       <div className="flex items-center justify-between">
-        <button onClick={() => navigate(-1)} className="p-2 bg-gray-800 rounded hover:bg-gray-700 text-gray-400">←</button>
+        <button onClick={() => navigate(-1)} className="p-2 bg-cream-100 rounded hover:bg-cream-200 text-warm-muted">←</button>
         <div className="text-lg font-semibold">
           {view === "month" && currentDate.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
           {view === "week" && `${fmt(startOfWeek(currentDate))} – ${fmt((() => { const d = startOfWeek(currentDate); d.setDate(d.getDate() + 6); return d })())}`}
           {view === "day" && fmtDay(currentDate)}
         </div>
-        <button onClick={() => navigate(1)} className="p-2 bg-gray-800 rounded hover:bg-gray-700 text-gray-400">→</button>
+        <button onClick={() => navigate(1)} className="p-2 bg-cream-100 rounded hover:bg-cream-200 text-warm-muted">→</button>
       </div>
 
       {/* View */}
@@ -313,31 +313,31 @@ export default function CalendarClient({ events }: { events: CalEvent[] }) {
         {Object.entries(categoryColors).map(([name, c]) => (
           <div key={name} className="flex items-center gap-1.5">
             <div className={`w-2.5 h-2.5 rounded-full ${c.dot}`} />
-            <span className="text-xs text-gray-500 capitalize">{name}</span>
+            <span className="text-xs text-warm-muted capitalize">{name}</span>
           </div>
         ))}
       </div>
 
       {/* Event Detail Modal */}
       {selectedEvent && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50" onClick={() => setSelectedEvent(null)}>
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50" onClick={() => setSelectedEvent(null)}>
           <div className="card max-w-md w-full mx-4" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-start justify-between mb-4">
               <div>
                 <h2 className="text-xl font-bold">{selectedEvent.title}</h2>
-                <div className="text-sm text-gray-400 mt-1">{selectedEvent.time} · {selectedEvent.source}</div>
+                <div className="text-sm text-warm-muted mt-1">{selectedEvent.time} · {selectedEvent.source}</div>
               </div>
-              <button onClick={() => setSelectedEvent(null)} className="text-gray-500 hover:text-white text-xl">×</button>
+              <button onClick={() => setSelectedEvent(null)} className="text-warm-muted hover:text-warm-text text-xl">×</button>
             </div>
             {selectedEvent.recurrence && (
-              <div className="text-sm text-gray-400 mb-2">🔄 {selectedEvent.recurrence}</div>
+              <div className="text-sm text-warm-muted mb-2">🔄 {selectedEvent.recurrence}</div>
             )}
             {selectedEvent.description && (
-              <div className="text-sm text-gray-300 mb-4">{selectedEvent.description}</div>
+              <div className="text-sm text-warm-text mb-4">{selectedEvent.description}</div>
             )}
             <div className="flex items-center gap-2">
               <div className={`w-3 h-3 rounded-full ${getColor(selectedEvent.color).dot}`} />
-              <span className="text-sm text-gray-400 capitalize">{selectedEvent.color || "gray"}</span>
+              <span className="text-sm text-warm-muted capitalize">{selectedEvent.color || "gray"}</span>
             </div>
           </div>
         </div>

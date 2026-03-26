@@ -64,6 +64,35 @@ export async function getLearnings(days = 30) {
   return data || []
 }
 
+export async function getOpsBoard() {
+  const supabase = supabaseServer()
+  const { data, error } = await supabase
+    .from('ops_board')
+    .select('*')
+    .neq('status', 'done')
+    .order('priority', { ascending: true })
+  if (error) return []
+  return data || []
+}
+
+export async function getOpsBoardScored() {
+  const items = await getOpsBoard()
+  const now = new Date()
+  return items.map((item: any) => {
+    const pri = item.priority ?? 3
+    const nad = item.next_action_date ? new Date(item.next_action_date) : null
+    const lad = item.last_action_date ? new Date(item.last_action_date) : null
+    const daysUntilDue = nad ? Math.max(0, (nad.getTime() - now.getTime()) / 86400000) : 30
+    const daysStale = lad ? Math.max(0, (now.getTime() - lad.getTime()) / 86400000) : 0
+    const isBlocked = item.status === 'blocked' ? 1 : 0
+    const score = (5 - pri) * 10
+      + Math.max(0, 30 - daysUntilDue) * 2
+      + Math.min(daysStale, 14)
+      + 10 * isBlocked
+    return { ...item, _score: Math.round(score) }
+  }).sort((a: any, b: any) => b._score - a._score)
+}
+
 export async function getObsidianStats() {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.VERCEL_URL

@@ -69,6 +69,28 @@ export interface TeamMember {
   responsibilities: string;
 }
 
+export interface OpsBoardItem {
+  id: string
+  domain: string
+  title: string
+  owner: string | null
+  status: string
+  priority: number
+  is_recurring: boolean
+  last_action: string | null
+  last_action_date: string | null
+  next_action: string | null
+  next_action_date: string | null
+  source: string | null
+  source_id: string | null
+  notes: string | null
+  source_links: Record<string, any> | null
+  thread_history: Record<string, any>[] | null
+  updated_at: string
+  created_at: string
+  _score?: number
+}
+
 // API Request/Response types
 export interface CreateTaskInput {
   title: string;

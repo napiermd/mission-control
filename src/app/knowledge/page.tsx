@@ -62,7 +62,6 @@ export default function KnowledgeGraphPage() {
       setOrphans(Array.isArray(orphansData) ? orphansData : [])
     } catch (error) {
       console.error('Failed to load knowledge graph:', error)
-      // Set empty defaults on error
       setStats({ total_nodes: 0, total_edges: 0, total_tags: 0 })
       setHubs([])
       setClusters([])
@@ -96,7 +95,7 @@ export default function KnowledgeGraphPage() {
     <div>
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Knowledge Graph</h1>
-        <div className="text-sm text-gray-400">
+        <div className="text-sm text-warm-muted">
           Obsidian Vault Analysis
         </div>
       </div>
@@ -105,19 +104,19 @@ export default function KnowledgeGraphPage() {
       {stats && (
         <div className="grid grid-cols-3 gap-6 mb-8">
           <div className="card">
-            <div className="text-gray-400 text-sm">Total Notes</div>
+            <div className="text-warm-muted text-sm">Total Notes</div>
             <div className="text-3xl font-bold">{stats.total_nodes}</div>
-            <div className="text-xs text-gray-500 mt-2">in vault</div>
+            <div className="text-xs text-warm-muted mt-2">in vault</div>
           </div>
           <div className="card">
-            <div className="text-gray-400 text-sm">Connections</div>
-            <div className="text-3xl font-bold text-blue-400">{stats.total_edges}</div>
-            <div className="text-xs text-gray-500 mt-2">wikilinks</div>
+            <div className="text-warm-muted text-sm">Connections</div>
+            <div className="text-3xl font-bold text-blue-600">{stats.total_edges}</div>
+            <div className="text-xs text-warm-muted mt-2">wikilinks</div>
           </div>
           <div className="card">
-            <div className="text-gray-400 text-sm">Tags</div>
-            <div className="text-3xl font-bold text-purple-400">{stats.total_tags}</div>
-            <div className="text-xs text-gray-500 mt-2">unique</div>
+            <div className="text-warm-muted text-sm">Tags</div>
+            <div className="text-3xl font-bold text-purple-600">{stats.total_tags}</div>
+            <div className="text-xs text-warm-muted mt-2">unique</div>
           </div>
         </div>
       )}
@@ -129,21 +128,21 @@ export default function KnowledgeGraphPage() {
           placeholder="Search notes by title or tag..."
           value={searchQuery}
           onChange={(e) => handleSearch(e.target.value)}
-          className="w-full bg-gray-800 text-white px-4 py-3 rounded-lg border border-gray-700 focus:border-blue-500 focus:outline-none"
+          className="w-full bg-white text-warm-text px-4 py-3 rounded-lg border border-cream-200 focus:border-blue-500 focus:outline-none"
         />
-        
+
         {searchResults.length > 0 && (
           <div className="mt-4 space-y-2">
             {searchResults.map((note, idx) => (
-              <div key={idx} className="p-3 bg-gray-800/50 rounded">
+              <div key={idx} className="p-3 bg-cream-50 rounded">
                 <div className="font-medium">{note.title}</div>
-                <div className="text-sm text-gray-400 mt-1">
-                  {note.total_links} links • {note.tags.length} tags
+                <div className="text-sm text-warm-muted mt-1">
+                  {note.total_links} links — {note.tags.length} tags
                 </div>
                 {note.tags.length > 0 && (
                   <div className="flex gap-2 mt-2 flex-wrap">
                     {note.tags.slice(0, 5).map((tag, i) => (
-                      <span key={i} className="text-xs bg-purple-900/30 text-purple-300 px-2 py-1 rounded">
+                      <span key={i} className="text-xs bg-purple-50 text-purple-600 px-2 py-1 rounded">
                         #{tag}
                       </span>
                     ))}
@@ -159,20 +158,20 @@ export default function KnowledgeGraphPage() {
         {/* Hub Notes */}
         <div className="card">
           <h2 className="text-xl font-bold mb-4">Hub Notes</h2>
-          <div className="text-sm text-gray-400 mb-4">
+          <div className="text-sm text-warm-muted mb-4">
             Most connected notes in your vault
           </div>
           <div className="space-y-3">
             {hubs.map((hub, idx) => (
-              <div key={idx} className="p-3 bg-gray-800/50 rounded">
+              <div key={idx} className="p-3 bg-cream-50 rounded">
                 <div className="flex items-center justify-between mb-1">
                   <div className="font-medium">{hub.title}</div>
-                  <div className="text-sm text-blue-400">{hub.total_links} links</div>
+                  <div className="text-sm text-blue-600">{hub.total_links} links</div>
                 </div>
                 {hub.tags?.length > 0 && (
                   <div className="flex gap-2 flex-wrap mt-2">
                     {hub.tags.slice(0, 3).map((tag, i) => (
-                      <span key={i} className="text-xs bg-purple-900/30 text-purple-300 px-2 py-1 rounded">
+                      <span key={i} className="text-xs bg-purple-50 text-purple-600 px-2 py-1 rounded">
                         #{tag}
                       </span>
                     ))}
@@ -186,17 +185,17 @@ export default function KnowledgeGraphPage() {
         {/* Tag Clusters */}
         <div className="card">
           <h2 className="text-xl font-bold mb-4">Tag Clusters</h2>
-          <div className="text-sm text-gray-400 mb-4">
+          <div className="text-sm text-warm-muted mb-4">
             Groups of related notes
           </div>
           <div className="space-y-3">
             {clusters.map((cluster, idx) => (
-              <div key={idx} className="p-3 bg-gray-800/50 rounded">
+              <div key={idx} className="p-3 bg-cream-50 rounded">
                 <div className="flex items-center justify-between mb-2">
-                  <div className="font-medium text-purple-400">#{cluster.tag}</div>
-                  <div className="text-sm text-gray-400">{cluster.count} notes</div>
+                  <div className="font-medium text-purple-600">#{cluster.tag}</div>
+                  <div className="text-sm text-warm-muted">{cluster.count} notes</div>
                 </div>
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-warm-muted">
                   {cluster.notes.slice(0, 3).join(', ')}
                   {cluster.notes.length > 3 && ` +${cluster.notes.length - 3} more`}
                 </div>
@@ -208,21 +207,21 @@ export default function KnowledgeGraphPage() {
         {/* Orphan Notes */}
         <div className="card col-span-2">
           <h2 className="text-xl font-bold mb-4">Orphan Notes</h2>
-          <div className="text-sm text-gray-400 mb-4">
+          <div className="text-sm text-warm-muted mb-4">
             Notes with no connections (candidates for linking or archiving)
           </div>
           <div className="grid grid-cols-3 gap-3">
             {orphans.slice(0, 15).map((orphan, idx) => (
-              <div key={idx} className="p-3 bg-gray-800/50 rounded text-sm">
-                <div className="font-medium text-yellow-400">{orphan.title}</div>
-                <div className="text-xs text-gray-500 mt-1">
+              <div key={idx} className="p-3 bg-cream-50 rounded text-sm">
+                <div className="font-medium text-amber-600">{orphan.title}</div>
+                <div className="text-xs text-warm-muted mt-1">
                   {orphan.tags.length > 0 ? `#${orphan.tags[0]}` : 'no tags'}
                 </div>
               </div>
             ))}
           </div>
           {orphans.length > 15 && (
-            <div className="text-sm text-gray-500 mt-4 text-center">
+            <div className="text-sm text-warm-muted mt-4 text-center">
               +{orphans.length - 15} more orphan notes
             </div>
           )}

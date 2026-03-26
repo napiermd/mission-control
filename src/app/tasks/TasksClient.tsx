@@ -15,17 +15,17 @@ type Task = {
 }
 
 const columns = [
-  { id: "TODO", label: "To Do", color: "text-gray-300", dot: "bg-yellow-400" },
-  { id: "IN_PROGRESS", label: "In Progress", color: "text-blue-400", dot: "bg-blue-400" },
-  { id: "REVIEW", label: "Review", color: "text-purple-400", dot: "bg-purple-400" },
-  { id: "DONE", label: "Done", color: "text-green-400", dot: "bg-green-400" },
+  { id: "TODO", label: "To Do", color: "text-warm-muted", dot: "bg-yellow-400" },
+  { id: "IN_PROGRESS", label: "In Progress", color: "text-blue-600", dot: "bg-blue-400" },
+  { id: "REVIEW", label: "Review", color: "text-purple-600", dot: "bg-purple-400" },
+  { id: "DONE", label: "Done", color: "text-green-600", dot: "bg-green-400" },
 ]
 
 const priorityColor: Record<string, string> = {
-  URGENT: "text-red-400 bg-red-900/50 border-red-500",
-  HIGH: "text-orange-400 bg-orange-900/50 border-orange-500",
-  MEDIUM: "text-yellow-400 bg-yellow-900/50 border-yellow-500",
-  LOW: "text-gray-400 bg-gray-700 border-gray-600",
+  URGENT: "text-red-600 bg-red-50 border-red-400",
+  HIGH: "text-orange-600 bg-orange-50 border-orange-400",
+  MEDIUM: "text-amber-600 bg-amber-50 border-amber-400",
+  LOW: "text-warm-muted bg-cream-100 border-cream-200",
 }
 
 function inferSource(task: Task) {
@@ -78,12 +78,12 @@ export default function TasksClient({ tasks: initialTasks }: { tasks: Task[] }) 
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">✅ Task Board</h1>
-          <p className="text-gray-400 text-sm mt-1">{tasks.length} tasks · {tasks.filter((t) => t.status === "TODO" || t.status === "IN_PROGRESS").length} open</p>
+          <h1 className="text-3xl font-bold">Task Board</h1>
+          <p className="text-warm-muted text-sm mt-1">{tasks.length} tasks · {tasks.filter((t) => t.status === "TODO" || t.status === "IN_PROGRESS").length} open</p>
         </div>
         <div className="flex gap-2">
-          <button onClick={() => setView("kanban")} className={`px-3 py-1.5 rounded text-sm ${view === "kanban" ? "bg-blue-600 text-white" : "bg-gray-800 text-gray-400"}`}>Kanban</button>
-          <button onClick={() => setView("list")} className={`px-3 py-1.5 rounded text-sm ${view === "list" ? "bg-blue-600 text-white" : "bg-gray-800 text-gray-400"}`}>List</button>
+          <button onClick={() => setView("kanban")} className={`px-3 py-1.5 rounded text-sm ${view === "kanban" ? "bg-blue-600 text-white" : "bg-cream-100 text-warm-muted"}`}>Kanban</button>
+          <button onClick={() => setView("list")} className={`px-3 py-1.5 rounded text-sm ${view === "list" ? "bg-blue-600 text-white" : "bg-cream-100 text-warm-muted"}`}>List</button>
         </div>
       </div>
 
@@ -112,10 +112,10 @@ export default function TasksClient({ tasks: initialTasks }: { tasks: Task[] }) 
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={() => handleDrop(col.id)}
               >
-                <div className="flex items-center gap-2 mb-4 pb-2 border-b border-gray-700">
+                <div className="flex items-center gap-2 mb-4 pb-2 border-b border-cream-200">
                   <div className={`w-2.5 h-2.5 rounded-full ${col.dot}`} />
                   <h2 className={`text-sm font-semibold uppercase ${col.color}`}>{col.label}</h2>
-                  <span className="text-xs text-gray-500 ml-auto">{colTasks.length}</span>
+                  <span className="text-xs text-warm-muted ml-auto">{colTasks.length}</span>
                 </div>
                 <div className="space-y-2">
                   {colTasks.map((task) => (
@@ -123,26 +123,26 @@ export default function TasksClient({ tasks: initialTasks }: { tasks: Task[] }) 
                       key={task.id}
                       draggable
                       onDragStart={() => handleDragStart(task.id)}
-                      className={`p-3 bg-gray-800 rounded-lg border-l-4 cursor-grab active:cursor-grabbing hover:bg-gray-750 transition-colors ${
-                        priorityColor[task.priority || "LOW"]?.split(" ").pop() || "border-gray-600"
+                      className={`p-3 bg-cream-100 rounded-lg border-l-4 cursor-grab active:cursor-grabbing hover:bg-cream-200 transition-colors ${
+                        priorityColor[task.priority || "LOW"]?.split(" ").pop() || "border-cream-200"
                       }`}
                     >
                       <div className="text-sm font-medium">{task.title}</div>
-                      {task.description && <div className="text-xs text-gray-400 mt-1 line-clamp-2">{task.description}</div>}
+                      {task.description && <div className="text-xs text-warm-muted mt-1 line-clamp-2">{task.description}</div>}
                       <div className="flex items-center gap-2 mt-2 flex-wrap">
                         {task.priority && (
-                          <span className={`text-[10px] px-1.5 py-0.5 rounded ${priorityColor[task.priority] || "text-gray-400 bg-gray-700"}`}>
+                          <span className={`text-[10px] px-1.5 py-0.5 rounded ${priorityColor[task.priority] || "text-warm-muted bg-cream-100"}`}>
                             {task.priority}
                           </span>
                         )}
-                        <span className="text-[10px] text-gray-500">{inferSource(task)}</span>
-                        {task.assignee && <span className="text-[10px] text-gray-500 ml-auto">{task.assignee}</span>}
+                        <span className="text-[10px] text-warm-muted">{inferSource(task)}</span>
+                        {task.assignee && <span className="text-[10px] text-warm-muted ml-auto">{task.assignee}</span>}
                       </div>
-                      {task.context && <div className="text-[10px] text-gray-600 mt-1">{task.context}</div>}
+                      {task.context && <div className="text-[10px] text-warm-muted/70 mt-1">{task.context}</div>}
                     </div>
                   ))}
                   {colTasks.length === 0 && (
-                    <div className="text-center py-8 text-gray-600 text-xs">Drop tasks here</div>
+                    <div className="text-center py-8 text-warm-muted/70 text-xs">Drop tasks here</div>
                   )}
                 </div>
               </div>
@@ -156,16 +156,16 @@ export default function TasksClient({ tasks: initialTasks }: { tasks: Task[] }) 
         <div className="card">
           <div className="space-y-2">
             {filtered.map((task) => (
-              <div key={task.id} className="flex items-center gap-3 p-3 bg-gray-800 rounded-lg">
-                <div className={`w-2 h-2 rounded-full shrink-0 ${columns.find((c) => c.id === task.status)?.dot || "bg-gray-600"}`} />
+              <div key={task.id} className="flex items-center gap-3 p-3 bg-cream-100 rounded-lg">
+                <div className={`w-2 h-2 rounded-full shrink-0 ${columns.find((c) => c.id === task.status)?.dot || "bg-cream-200"}`} />
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-medium truncate">{task.title}</div>
-                  <div className="text-[10px] text-gray-500">{inferSource(task)} · {task.assignee || "Unassigned"}{task.context ? ` · ${task.context}` : ""}</div>
+                  <div className="text-[10px] text-warm-muted">{inferSource(task)} · {task.assignee || "Unassigned"}{task.context ? ` · ${task.context}` : ""}</div>
                 </div>
                 {task.priority && (
-                  <span className={`text-[10px] px-1.5 py-0.5 rounded shrink-0 ${priorityColor[task.priority] || "text-gray-400 bg-gray-700"}`}>{task.priority}</span>
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded shrink-0 ${priorityColor[task.priority] || "text-warm-muted bg-cream-100"}`}>{task.priority}</span>
                 )}
-                <span className="text-[10px] text-gray-500 shrink-0">{task.status}</span>
+                <span className="text-[10px] text-warm-muted shrink-0">{task.status}</span>
               </div>
             ))}
           </div>

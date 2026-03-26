@@ -1,5 +1,5 @@
 import './globals.css'
-import Link from 'next/link'
+import TabNavigation from '@/components/TabNavigation'
 
 export const metadata = {
   title: 'Mission Control',
@@ -7,49 +7,17 @@ export const metadata = {
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const navItems = [
-    { href: '/', label: 'Dashboard', icon: '🎯' },
-    { href: '/tasks', label: 'Tasks', icon: '✅' },
-    { href: '/pipeline', label: 'Pipeline', icon: '📺' },
-    { href: '/calendar', label: 'Calendar', icon: '📅' },
-    { href: '/memory', label: 'Memory', icon: '🧠' },
-    { href: '/learning', label: 'Learning', icon: '📚' },
-    { href: '/knowledge', label: 'Knowledge', icon: '🕸️' },
-    { href: '/graph', label: 'Graph', icon: '🌐' },
-    { href: '/team', label: 'Team', icon: '👥' },
-    { href: '/skills', label: 'Skills', icon: '🧬' },
-    { href: '/contacts', label: 'Contacts', icon: '📇' },
-    { href: '/settings', label: 'Settings', icon: '⚙️' },
-  ]
-
   return (
     <html lang="en">
-      <body>
-        <div className="flex">
-          {/* Sidebar */}
-          <aside className="sidebar">
-            <div className="p-6">
-              <h1 className="text-xl font-bold text-white mb-8">🎮 Mission Control</h1>
-              <nav className="space-y-2">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
-                  >
-                    <span>{item.icon}</span>
-                    <span>{item.label}</span>
-                  </Link>
-                ))}
-              </nav>
+      <body className="bg-cream-50 text-warm-text">
+        <div className="min-h-screen flex flex-col">
+          <header className="bg-white border-b border-cream-200">
+            <div className="max-w-7xl mx-auto w-full px-6 pt-4 pb-0">
+              <div className="text-xs text-warm-muted mb-1">IntuBlade Command Center</div>
             </div>
-            <div className="absolute bottom-0 p-6 w-full">
-              <div className="text-xs text-gray-500">v1.0 • {new Date().toLocaleDateString()}</div>
-            </div>
-          </aside>
-
-          {/* Main Content */}
-          <main className="main-content w-full">
+            <TabNavigation />
+          </header>
+          <main className="main-content max-w-7xl mx-auto w-full px-6 py-6">
             {children}
           </main>
         </div>
