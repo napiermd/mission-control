@@ -3,8 +3,11 @@
 import { useEffect, useMemo, useState, lazy, Suspense } from "react"
 import { useRouter } from "next/navigation"
 import TARSHeader from "./TARSHeader"
+import VentureKPIs from "./VentureKPIs"
+import Deadlines from "./Deadlines"
 import AttentionPanel from "./AttentionPanel"
 import TodaySchedule from "./TodaySchedule"
+import SalesPipeline from "./SalesPipeline"
 import WaitingOn from "./WaitingOn"
 import MorningBrief from "./MorningBrief"
 import SonOfAnton from "./SonOfAnton"
@@ -52,15 +55,11 @@ export default function DashboardClient({
 }) {
   const [venture, setVenture] = useState("all")
   const [openDrawer, setOpenDrawer] = useState<string | null>(null)
-  const [lastRefresh, setLastRefresh] = useState(Date.now())
   const router = useRouter()
 
   // Auto-refresh every 60s
   useEffect(() => {
-    const interval = setInterval(() => {
-      router.refresh()
-      setLastRefresh(Date.now())
-    }, 60000)
+    const interval = setInterval(() => router.refresh(), 60000)
     return () => clearInterval(interval)
   }, [router])
 
@@ -69,30 +68,50 @@ export default function DashboardClient({
     return allItems.filter((item) => domainToVenture(item.domain) === venture)
   }, [allItems, venture])
 
-  // Single unified action list — no more ATTENTION vs TASK BOARD split
+  // Unified action list
   const actionItems = useMemo(() => {
     return filtered
       .filter((i) => !i.is_recurring && i.title.length > 10)
       .slice(0, 15)
   }, [filtered])
 
-  const secondsAgo = Math.floor((Date.now() - lastRefresh) / 1000)
+  // Deadlines: items with future next_action_date
+  const deadlines = useMemo(() => {
+    const now = Date.now()
+    return filtered
+      .filter((i) => i.next_action_date && new Date(i.next_action_date).getTime() > now)
+      .map((i) => ({ id: i.id, title: i.title, next_action_date: i.next_action_date!, domain: i.domain }))
+  }, [filtered])
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
+      {/* 1. Header */}
       <TARSHeader stats={stats} venture={venture} onVentureChange={setVenture} />
 
-      {/* Top row: Action Items + Today */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
-        <div className="card card-glow lg:col-span-3">
-          <AttentionPanel items={actionItems} />
+      {/* 2. Venture KPIs */}
+      <VentureKPIs opsItems={allItems} />
+
+      {/* 3. Deadlines + Today */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="card">
+          <Deadlines items={deadlines} />
         </div>
-        <div className="card lg:col-span-2">
+        <div className="card">
           <TodaySchedule events={calendar} />
         </div>
       </div>
 
-      {/* Bottom row: Waiting On + Brief + Son of Anton */}
+      {/* 4. Action Items */}
+      <div className="card card-glow">
+        <AttentionPanel items={actionItems} />
+      </div>
+
+      {/* 5. Pipeline */}
+      <div className="card">
+        <SalesPipeline />
+      </div>
+
+      {/* 6. Bottom row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="card">
           <WaitingOn items={followUps} />
@@ -105,32 +124,20 @@ export default function DashboardClient({
         </div>
       </div>
 
-      {/* Quick access drawers with counts */}
+      {/* 7. Drawer triggers */}
       <div className="flex gap-3 pt-2 border-t border-space-border">
-        <button
-          onClick={() => setOpenDrawer("gmail")}
-          className="flex-1 btn btn-secondary text-xs py-3"
-        >
+        <button onClick={() => setOpenDrawer("gmail")} className="flex-1 btn btn-secondary text-xs py-3">
           Gmail {stats.emailCount > 0 && <span className="text-hud-amber ml-1">({stats.emailCount})</span>} ▸
         </button>
-        <button
-          onClick={() => setOpenDrawer("slack")}
-          className="flex-1 btn btn-secondary text-xs py-3"
-        >
-          Slack {stats.slackCount > 0 && <span className="text-hud-amber ml-1">({stats.slackCount})</span>} ▸
+        <button onClick={() => setOpenDrawer("slack")} className="flex-1 btn btn-secondary text-xs py-3">
+          Slack ▸
         </button>
-        <button
-          onClick={() => setOpenDrawer("calendar")}
-          className="flex-1 btn btn-secondary text-xs py-3"
-        >
+        <button onClick={() => setOpenDrawer("calendar")} className="flex-1 btn btn-secondary text-xs py-3">
           Calendar ▸
         </button>
       </div>
 
-      {/* Auto-refresh indicator */}
-      <div className="text-center text-[9px] text-hud-muted/30">
-        auto-refresh 60s
-      </div>
+      <div className="text-center text-[9px] text-hud-muted/30">auto-refresh 60s</div>
 
       {/* Drawers */}
       <Drawer open={openDrawer === "gmail"} onClose={() => setOpenDrawer(null)} title="GMAIL">
@@ -138,13 +145,11 @@ export default function DashboardClient({
           <GmailClient />
         </Suspense>
       </Drawer>
-
       <Drawer open={openDrawer === "slack"} onClose={() => setOpenDrawer(null)} title="SLACK FEED">
         <Suspense fallback={<div className="text-hud-muted text-xs">Loading...</div>}>
           <SlackClient />
         </Suspense>
       </Drawer>
-
       <Drawer open={openDrawer === "calendar"} onClose={() => setOpenDrawer(null)} title="CALENDAR">
         <div className="text-xs text-hud-muted space-y-2">
           {calendar.map((e: any) => (
