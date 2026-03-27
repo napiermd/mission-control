@@ -106,23 +106,23 @@ export default function DashboardClient({
         </div>
       </div>
 
-      {/* Drawer triggers */}
-      <div className="flex gap-3">
+      {/* Quick access drawers */}
+      <div className="flex gap-3 pt-2 border-t border-space-border">
         <button
           onClick={() => setOpenDrawer("gmail")}
-          className="btn btn-secondary text-xs"
+          className="flex-1 btn btn-secondary text-xs py-3"
         >
           Gmail ▸
         </button>
         <button
           onClick={() => setOpenDrawer("slack")}
-          className="btn btn-secondary text-xs"
+          className="flex-1 btn btn-secondary text-xs py-3"
         >
           Slack ▸
         </button>
         <button
           onClick={() => setOpenDrawer("calendar")}
-          className="btn btn-secondary text-xs"
+          className="flex-1 btn btn-secondary text-xs py-3"
         >
           Calendar ▸
         </button>
