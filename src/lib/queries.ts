@@ -117,9 +117,11 @@ export async function getLatestBrief() {
 
 export async function getTodayCalendar() {
   const supabase = supabaseServer()
+  const today = new Date().toLocaleDateString('en-CA') // YYYY-MM-DD format
   const { data, error } = await supabase
     .from('mc_calendar')
     .select('*')
+    .eq('recurrence', today)
     .order('time', { ascending: true })
   if (error) return []
   return data || []
