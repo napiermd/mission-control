@@ -38,12 +38,12 @@ export default async function SettingsPage() {
   }
 
   const agents = [
-    { id: "main", name: "TARS", model: "claude-opus-4-6", default: "sonnet-4-6 → gemini-2.5-flash" },
-    { id: "dev", name: "Son of Anton", model: "gpt-5.4-codex", default: "opus-4-6 → sonnet-4-6" },
-    { id: "ops", name: "Ops", model: "claude-opus-4-6", default: "sonnet-4-6 → gemini-2.5-flash" },
-    { id: "sales", name: "Sales", model: "claude-opus-4-6", default: "sonnet-4-6 → gemini-2.5-flash" },
-    { id: "research", name: "Research", model: "claude-opus-4-6", default: "sonnet-4-6 → gemini-2.5-flash" },
-    { id: "finance", name: "Finance", model: "claude-opus-4-6", default: "sonnet-4-6 → gemini-2.5-flash" },
+    { id: "main", name: "TARS", model: "claude-opus-4-6", default: "gpt-5.4 → gemini-2.5-flash" },
+    { id: "dev", name: "Son of Anton", model: "gpt-5.4-codex", default: "opus-4-6 → gemini-2.5-flash" },
+    { id: "ops", name: "Ops", model: "claude-opus-4-6", default: "gpt-5.4 → gemini-2.5-flash" },
+    { id: "sales", name: "Sales", model: "claude-opus-4-6", default: "gpt-5.4 → gemini-2.5-flash" },
+    { id: "research", name: "Research", model: "claude-opus-4-6", default: "gpt-5.4 → gemini-2.5-flash" },
+    { id: "finance", name: "Finance", model: "claude-opus-4-6", default: "gpt-5.4 → gemini-2.5-flash" },
   ]
 
   const cronStats = [
