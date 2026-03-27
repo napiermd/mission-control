@@ -9,8 +9,8 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className="bg-space-black text-hud-text">
+    <html lang="en" className="font-mono">
+      <body className="bg-space-black text-hud-text !font-[JetBrains_Mono,SF_Mono,Fira_Code,monospace]">
         <div className="min-h-screen flex flex-col">
           <header className="border-b border-space-border px-6 py-3 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-3">
