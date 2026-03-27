@@ -38,12 +38,12 @@ export default async function SettingsPage() {
   }
 
   const agents = [
-    { id: "dev", name: "Tony", model: "claude-opus-4-6", default: "gpt-5.3-codex" },
-    { id: "ops", name: "Ops", model: "claude-sonnet-4-5", default: "gpt-5.3-codex" },
-    { id: "sales", name: "Sales", model: "claude-sonnet-4-5", default: "gpt-5.3-codex" },
-    { id: "research", name: "Research", model: "claude-sonnet-4-5", default: "gpt-5.3-codex" },
-    { id: "main", name: "Main", model: "kimi-k2.5", default: "gpt-5.3-codex" },
-    { id: "academic", name: "Academic", model: "claude-sonnet-4-5", default: "gpt-5.3-codex" },
+    { id: "main", name: "TARS", model: "claude-opus-4-6", default: "sonnet-4-6 → gemini-2.5-flash" },
+    { id: "dev", name: "Son of Anton", model: "gpt-5.4-codex", default: "opus-4-6 → sonnet-4-6" },
+    { id: "ops", name: "Ops", model: "claude-opus-4-6", default: "sonnet-4-6 → gemini-2.5-flash" },
+    { id: "sales", name: "Sales", model: "claude-opus-4-6", default: "sonnet-4-6 → gemini-2.5-flash" },
+    { id: "research", name: "Research", model: "claude-opus-4-6", default: "sonnet-4-6 → gemini-2.5-flash" },
+    { id: "finance", name: "Finance", model: "claude-opus-4-6", default: "sonnet-4-6 → gemini-2.5-flash" },
   ]
 
   const cronStats = [
