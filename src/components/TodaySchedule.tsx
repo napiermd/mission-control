@@ -78,7 +78,18 @@ export default function TodaySchedule({ events }: { events: CalEvent[] }) {
           {routine.length > 0 && (
             <div className="mt-2 pt-2 border-t border-space-border">
               <div className="text-[10px] text-hud-muted/50 mb-1">routine</div>
-              {routine.map((event) => (
+              {[...routine].sort((a, b) => {
+                const parseTime = (t: string | null) => {
+                  if (!t) return 0
+                  const m = t.match(/(\d+):(\d+)\s*(AM|PM)/i)
+                  if (!m) return 0
+                  let h = parseInt(m[1])
+                  if (m[3].toUpperCase() === 'PM' && h < 12) h += 12
+                  if (m[3].toUpperCase() === 'AM' && h === 12) h = 0
+                  return h * 60 + parseInt(m[2])
+                }
+                return parseTime(a.time) - parseTime(b.time)
+              }).map((event) => (
                 <div key={event.id} className="flex gap-3 items-center text-[10px] text-hud-muted/40">
                   <span className="shrink-0 w-24 text-right">{event.time || ""}</span>
                   <span className="flex-1">{event.title}</span>

@@ -58,6 +58,15 @@ export default function SalesPipeline() {
         <span className="text-hud-muted font-normal text-[10px] ml-1">
           {data.totalDeals} deals / {data.closedWon} won
         </span>
+        <a
+          href="https://app.hubspot.com/contacts/47433767/objects/0-3/views/all/list"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-hud-amber/50 hover:text-hud-amber text-[10px] font-normal ml-auto"
+          onClick={(e) => e.stopPropagation()}
+        >
+          [hubspot]
+        </a>
       </button>
       {expanded && (
         <div className="space-y-2">
