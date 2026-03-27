@@ -8,6 +8,7 @@ type CalEvent = {
   time: string | null
   color: string | null
   source: string | null
+  status?: string
 }
 
 const colorMap: Record<string, string> = {
@@ -19,20 +20,27 @@ const colorMap: Record<string, string> = {
   gray: "text-hud-muted",
 }
 
+const routineEvents = ["Family Block", "BREAK", "HARD STOP", "Email Sweep", "Focus Time"]
+
+function isRoutine(title: string) {
+  return routineEvents.some(r => title.includes(r))
+}
+
 export default function TodaySchedule({ events }: { events: CalEvent[] }) {
   const [expanded, setExpanded] = useState(true)
 
-  // Filter out noise and deduplicate by title+time
+  // Deduplicate by title+time, filter (copy) events
   const seen = new Set<string>()
-  const meaningful = events.filter(e => {
-    if (e.title.includes("BREAK") || e.title.includes("HARD STOP") ||
-        e.title.includes("Family Block") || e.title.includes("Email Sweep") ||
-        e.title.includes("(copy)") || e.title.includes("Focus Time")) return false
+  const deduped = events.filter(e => {
+    if (e.title.includes("(copy)")) return false
     const key = `${e.title}|${e.time}`
     if (seen.has(key)) return false
     seen.add(key)
     return true
-  }).slice(0, 8)
+  })
+
+  const meaningful = deduped.filter(e => !isRoutine(e.title))
+  const routine = deduped.filter(e => isRoutine(e.title))
 
   return (
     <div>
@@ -44,18 +52,17 @@ export default function TodaySchedule({ events }: { events: CalEvent[] }) {
         TODAY [{meaningful.length}]
       </button>
       {expanded && (
-        <div className="space-y-1.5">
+        <div className="space-y-1">
+          {/* Real events */}
           {meaningful.length > 0 ? meaningful.map((event) => {
-            const endTime = (event as any).status?.includes('|') ? (event as any).status.split('|')[1] : ''
+            const endTime = event.status?.includes('|') ? event.status.split('|')[1] : ''
             return (
               <div key={event.id} className="flex gap-3 items-center text-xs">
                 <div className="shrink-0 w-24 text-right">
                   <span className={colorMap[event.color || "gray"] || "text-hud-muted"}>
                     {event.time || "TBD"}
                   </span>
-                  {endTime && (
-                    <span className="text-hud-muted"> - {endTime}</span>
-                  )}
+                  {endTime && <span className="text-hud-muted"> - {endTime}</span>}
                 </div>
                 <span className="text-hud-text flex-1">{event.title}</span>
                 {event.source && (
@@ -65,6 +72,19 @@ export default function TodaySchedule({ events }: { events: CalEvent[] }) {
             )
           }) : (
             <div className="text-xs text-hud-muted">Clear schedule.</div>
+          )}
+
+          {/* Routine events — muted, collapsed */}
+          {routine.length > 0 && (
+            <div className="mt-2 pt-2 border-t border-space-border">
+              <div className="text-[10px] text-hud-muted/50 mb-1">routine</div>
+              {routine.map((event) => (
+                <div key={event.id} className="flex gap-3 items-center text-[10px] text-hud-muted/40">
+                  <span className="shrink-0 w-24 text-right">{event.time || ""}</span>
+                  <span className="flex-1">{event.title}</span>
+                </div>
+              ))}
+            </div>
           )}
         </div>
       )}

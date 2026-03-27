@@ -8,6 +8,8 @@ type Props = {
     totalItems: number
     urgentCount: number
     blockedCount: number
+    emailCount: number
+    slackCount: number
   }
   venture: string
   onVentureChange: (v: string) => void

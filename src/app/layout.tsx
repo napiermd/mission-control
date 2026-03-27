@@ -19,7 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <span className="text-hud-muted text-xs tracking-wider uppercase">Mission Control</span>
             </Link>
             <div className="flex items-center gap-4">
-              <span className="text-hud-muted text-xs">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</span>
+              <span className="text-hud-muted text-xs">{new Date(Date.now() + (-7 * 60 * 60 * 1000)).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}</span>
               <Link href="/settings" className="text-hud-muted hover:text-hud-amber text-xs transition-colors py-2 px-2">
                 [settings]
               </Link>

@@ -1,10 +1,10 @@
 "use client"
 
-import { useMemo, useState, lazy, Suspense } from "react"
+import { useEffect, useMemo, useState, lazy, Suspense } from "react"
+import { useRouter } from "next/navigation"
 import TARSHeader from "./TARSHeader"
 import AttentionPanel from "./AttentionPanel"
 import TodaySchedule from "./TodaySchedule"
-import TaskBoard from "./TaskBoard"
 import WaitingOn from "./WaitingOn"
 import MorningBrief from "./MorningBrief"
 import SonOfAnton from "./SonOfAnton"
@@ -31,6 +31,8 @@ type Stats = {
   totalItems: number
   urgentCount: number
   blockedCount: number
+  emailCount: number
+  slackCount: number
 }
 
 export default function DashboardClient({
@@ -50,47 +52,44 @@ export default function DashboardClient({
 }) {
   const [venture, setVenture] = useState("all")
   const [openDrawer, setOpenDrawer] = useState<string | null>(null)
+  const [lastRefresh, setLastRefresh] = useState(Date.now())
+  const router = useRouter()
+
+  // Auto-refresh every 60s
+  useEffect(() => {
+    const interval = setInterval(() => {
+      router.refresh()
+      setLastRefresh(Date.now())
+    }, 60000)
+    return () => clearInterval(interval)
+  }, [router])
 
   const filtered = useMemo(() => {
     if (venture === "all") return allItems
     return allItems.filter((item) => domainToVenture(item.domain) === venture)
   }, [allItems, venture])
 
-  // ATTENTION: high-score items that need awareness (includes blocked, no next_action, or stale)
-  const attention = useMemo(() => {
+  // Single unified action list — no more ATTENTION vs TASK BOARD split
+  const actionItems = useMemo(() => {
     return filtered
       .filter((i) => !i.is_recurring && i.title.length > 10)
-      .filter((i) => !i.next_action || i.status === "blocked" || i._score >= 30)
-      .slice(0, 8)
+      .slice(0, 15)
   }, [filtered])
 
-  // TASK BOARD: items with a real, distinct next_action you can check off
-  // Excludes items already in ATTENTION to avoid duplication
-  const attentionIds = new Set(attention.map((i) => i.id))
-  const actionable = useMemo(() => {
-    return filtered
-      .filter((i) => i.next_action && i.next_action.length > 10 && !i.is_recurring && i.status !== "blocked")
-      .filter((i) => !attentionIds.has(i.id))
-      .slice(0, 12)
-  }, [filtered, attentionIds])
+  const secondsAgo = Math.floor((Date.now() - lastRefresh) / 1000)
 
   return (
     <div className="space-y-6">
       <TARSHeader stats={stats} venture={venture} onVentureChange={setVenture} />
 
-      {/* Top row: Attention + Today */}
+      {/* Top row: Action Items + Today */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
         <div className="card card-glow lg:col-span-3">
-          <AttentionPanel items={attention} />
+          <AttentionPanel items={actionItems} />
         </div>
         <div className="card lg:col-span-2">
           <TodaySchedule events={calendar} />
         </div>
-      </div>
-
-      {/* Task Board */}
-      <div className="card">
-        <TaskBoard items={actionable} />
       </div>
 
       {/* Bottom row: Waiting On + Brief + Son of Anton */}
@@ -106,19 +105,19 @@ export default function DashboardClient({
         </div>
       </div>
 
-      {/* Quick access drawers */}
+      {/* Quick access drawers with counts */}
       <div className="flex gap-3 pt-2 border-t border-space-border">
         <button
           onClick={() => setOpenDrawer("gmail")}
           className="flex-1 btn btn-secondary text-xs py-3"
         >
-          Gmail ▸
+          Gmail {stats.emailCount > 0 && <span className="text-hud-amber ml-1">({stats.emailCount})</span>} ▸
         </button>
         <button
           onClick={() => setOpenDrawer("slack")}
           className="flex-1 btn btn-secondary text-xs py-3"
         >
-          Slack ▸
+          Slack {stats.slackCount > 0 && <span className="text-hud-amber ml-1">({stats.slackCount})</span>} ▸
         </button>
         <button
           onClick={() => setOpenDrawer("calendar")}
@@ -126,6 +125,11 @@ export default function DashboardClient({
         >
           Calendar ▸
         </button>
+      </div>
+
+      {/* Auto-refresh indicator */}
+      <div className="text-center text-[9px] text-hud-muted/30">
+        auto-refresh 60s
       </div>
 
       {/* Drawers */}
