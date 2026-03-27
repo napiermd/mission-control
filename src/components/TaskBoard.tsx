@@ -52,13 +52,13 @@ export default function TaskBoard({ items }: { items: TaskItem[] }) {
         <span className="text-hud-muted font-normal ml-2 text-[10px]">(tap to check off)</span>
       </button>
       {expanded && (
-        <div className="space-y-1">
+        <div className="space-y-0.5">
           {items.length > 0 ? items.map((item) => {
             const isDone = completed.has(item.id)
             return (
               <div
                 key={item.id}
-                className={`flex items-start gap-3 p-2 rounded cursor-pointer transition-colors hover:bg-space-panel ${
+                className={`flex items-start gap-3 px-3 py-2.5 rounded border border-transparent cursor-pointer transition-all hover:bg-space-panel hover:border-space-border ${
                   isDone ? "opacity-40" : ""
                 }`}
                 onClick={() => toggleDone(item.id)}
@@ -66,7 +66,7 @@ export default function TaskBoard({ items }: { items: TaskItem[] }) {
                 <div className={`w-4 h-4 rounded border shrink-0 mt-0.5 flex items-center justify-center transition-colors ${
                   isDone
                     ? "bg-hud-green border-hud-green text-space-black"
-                    : "border-space-border bg-transparent"
+                    : "border-hud-muted/40 bg-transparent hover:border-hud-amber"
                 }`}>
                   {isDone && (
                     <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
@@ -75,7 +75,7 @@ export default function TaskBoard({ items }: { items: TaskItem[] }) {
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className={`text-xs ${isDone ? "line-through text-hud-muted" : "text-hud-text"}`}>
+                  <div className={`text-xs leading-relaxed line-clamp-2 ${isDone ? "line-through text-hud-muted" : "text-hud-text"}`}>
                     {item.next_action || item.title}
                   </div>
                 </div>
