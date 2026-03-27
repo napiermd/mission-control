@@ -53,10 +53,10 @@ export default function MorningBrief({ brief }: { brief: BriefData }) {
         </div>
 
         {health && (
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-x-3 gap-y-1">
             {Object.entries(health).map(([source, status]) => (
-              <span key={source} className={`${status === 'ok' || status === true ? 'text-hud-green' : 'text-hud-red'}`}>
-                {source}: {status === 'ok' || status === true ? 'ok' : 'fail'}
+              <span key={source} className={`whitespace-nowrap ${status === 'ok' || status === true ? 'text-hud-green' : 'text-hud-red'}`}>
+                {source.replace(/_/g, ' ')}: {status === 'ok' || status === true ? 'ok' : 'fail'}
               </span>
             ))}
           </div>
