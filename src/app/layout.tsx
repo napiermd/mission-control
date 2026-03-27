@@ -5,6 +5,7 @@ import { format } from 'date-fns'
 export const metadata = {
   title: 'TARS // Mission Control',
   description: 'Personal Command Center',
+  icons: { icon: '/favicon.svg' },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

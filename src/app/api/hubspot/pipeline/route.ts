@@ -47,19 +47,28 @@ export async function GET() {
   }
 
   try {
-    // Total open deals (not closed lost)
-    const openRes = await fetch('https://api.hubapi.com/crm/v3/objects/deals/search', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        filterGroups: [{ filters: [{ propertyName: 'dealstage', operator: 'NEQ', value: 'closedlost' }] }],
-        properties: ['amount', 'dealstage'],
-        limit: 200,
-      }),
-    })
-    const openData = await openRes.json()
-    const openDeals = openData.results || []
-    const totalOpen = openData.total || openDeals.length
+    // Total open deals (not closed lost) — paginate to get all
+    let openDeals: any[] = []
+    let after = 0
+    let totalOpen = 0
+    for (let page = 0; page < 5; page++) {
+      const openRes = await fetch('https://api.hubapi.com/crm/v3/objects/deals/search', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          filterGroups: [{ filters: [{ propertyName: 'dealstage', operator: 'NEQ', value: 'closedlost' }] }],
+          properties: ['amount', 'dealstage'],
+          limit: 100,
+          after,
+        }),
+      })
+      const openData = await openRes.json()
+      const results = openData.results || []
+      openDeals.push(...results)
+      totalOpen = openData.total || openDeals.length
+      if (!openData.paging?.next?.after) break
+      after = parseInt(openData.paging.next.after)
+    }
 
     // Closed won deals
     const wonRes = await fetch('https://api.hubapi.com/crm/v3/objects/deals/search', {
@@ -83,6 +92,10 @@ export async function GET() {
       '1049718030': 'Pilot/Demo',
       '1323400849': 'Negotiation',
       '1049164706': 'Closed Won',
+      '1049164707': 'Shipped/Fulfilled',
+      '1049164708': 'Distributor',
+      '1323401565': 'Pilot Active',
+      closedlost: 'Closed Lost',
     }
 
     for (const deal of openDeals) {
