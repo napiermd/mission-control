@@ -133,6 +133,9 @@ body::before {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--accent-amber);
+  min-height: 36px;
+  display: flex;
+  align-items: center;
 }
 
 /* Scanline effect on cards */

@@ -20,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </Link>
             <div className="flex items-center gap-4">
               <span className="text-hud-muted text-xs">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</span>
-              <Link href="/settings" className="text-hud-muted hover:text-hud-amber text-xs transition-colors">
+              <Link href="/settings" className="text-hud-muted hover:text-hud-amber text-xs transition-colors py-2 px-2">
                 [settings]
               </Link>
             </div>
