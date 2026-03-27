@@ -117,7 +117,10 @@ export async function getLatestBrief() {
 
 export async function getTodayCalendar() {
   const supabase = supabaseServer()
-  const today = new Date().toLocaleDateString('en-CA') // YYYY-MM-DD format
+  // Force Pacific timezone for date calculation
+  const now = new Date()
+  const pacific = new Date(now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }))
+  const today = `${pacific.getFullYear()}-${String(pacific.getMonth() + 1).padStart(2, '0')}-${String(pacific.getDate()).padStart(2, '0')}`
   const { data, error } = await supabase
     .from('mc_calendar')
     .select('*')
