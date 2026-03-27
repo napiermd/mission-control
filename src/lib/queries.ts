@@ -117,10 +117,11 @@ export async function getLatestBrief() {
 
 export async function getTodayCalendar() {
   const supabase = supabaseServer()
-  // Force Pacific timezone for date calculation
-  const now = new Date()
-  const pacific = new Date(now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }))
-  const today = `${pacific.getFullYear()}-${String(pacific.getMonth() + 1).padStart(2, '0')}-${String(pacific.getDate()).padStart(2, '0')}`
+  // PDT = UTC-7, PST = UTC-8. Use -7 (March = PDT)
+  const utcNow = Date.now()
+  const pacificOffset = -7 * 60 * 60 * 1000
+  const pacific = new Date(utcNow + pacificOffset)
+  const today = pacific.toISOString().slice(0, 10)
   const { data, error } = await supabase
     .from('mc_calendar')
     .select('*')

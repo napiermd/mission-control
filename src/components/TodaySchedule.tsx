@@ -45,17 +45,25 @@ export default function TodaySchedule({ events }: { events: CalEvent[] }) {
       </button>
       {expanded && (
         <div className="space-y-1.5">
-          {meaningful.length > 0 ? meaningful.map((event) => (
-            <div key={event.id} className="flex gap-3 items-center text-xs">
-              <span className={`shrink-0 w-14 text-right ${colorMap[event.color || "gray"] || "text-hud-muted"}`}>
-                {event.time || "TBD"}
-              </span>
-              <span className="text-hud-text">{event.title}</span>
-              {event.source && (
-                <span className="text-hud-muted ml-auto text-[10px]">{event.source}</span>
-              )}
-            </div>
-          )) : (
+          {meaningful.length > 0 ? meaningful.map((event) => {
+            const endTime = (event as any).status?.includes('|') ? (event as any).status.split('|')[1] : ''
+            return (
+              <div key={event.id} className="flex gap-3 items-center text-xs">
+                <div className="shrink-0 w-24 text-right">
+                  <span className={colorMap[event.color || "gray"] || "text-hud-muted"}>
+                    {event.time || "TBD"}
+                  </span>
+                  {endTime && (
+                    <span className="text-hud-muted"> - {endTime}</span>
+                  )}
+                </div>
+                <span className="text-hud-text flex-1">{event.title}</span>
+                {event.source && (
+                  <span className="text-hud-muted shrink-0 text-[10px]">{event.source}</span>
+                )}
+              </div>
+            )
+          }) : (
             <div className="text-xs text-hud-muted">Clear schedule.</div>
           )}
         </div>
