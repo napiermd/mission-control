@@ -22,13 +22,17 @@ const colorMap: Record<string, string> = {
 export default function TodaySchedule({ events }: { events: CalEvent[] }) {
   const [expanded, setExpanded] = useState(true)
 
-  // Filter to meaningful events (not breaks/hard stops for the HUD view)
-  const meaningful = events.filter(e =>
-    !e.title.includes("BREAK") &&
-    !e.title.includes("HARD STOP") &&
-    !e.title.includes("Family Block") &&
-    !e.title.includes("Email Sweep")
-  ).slice(0, 8)
+  // Filter out noise and deduplicate by title+time
+  const seen = new Set<string>()
+  const meaningful = events.filter(e => {
+    if (e.title.includes("BREAK") || e.title.includes("HARD STOP") ||
+        e.title.includes("Family Block") || e.title.includes("Email Sweep") ||
+        e.title.includes("(copy)") || e.title.includes("Focus Time")) return false
+    const key = `${e.title}|${e.time}`
+    if (seen.has(key)) return false
+    seen.add(key)
+    return true
+  }).slice(0, 8)
 
   return (
     <div>

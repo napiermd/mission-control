@@ -87,8 +87,8 @@ export default function TaskBoard({ items }: { items: TaskItem[] }) {
                       {formatDate(item.next_action_date)}
                     </span>
                   )}
-                  {item.owner && (
-                    <span className="text-[10px] text-hud-muted bg-space-panel px-1.5 py-0.5 rounded border border-space-border">
+                  {item.owner && item.owner.toLowerCase() !== "andrew" && (
+                    <span className="text-[10px] text-hud-amber bg-space-panel px-1.5 py-0.5 rounded border border-space-border">
                       {item.owner}
                     </span>
                   )}

@@ -47,7 +47,7 @@ export default function AttentionPanel({ items }: { items: Item[] }) {
                 <div className="text-xs text-hud-text">
                   <span className="text-hud-muted mr-1.5">[{domainTag(item.domain)}]</span>
                   {item.title}
-                  {item.owner && <span className="text-hud-muted"> — {item.owner}</span>}
+                  {item.owner && item.owner.toLowerCase() !== "andrew" && <span className="text-hud-amber"> — {item.owner}</span>}
                 </div>
                 {item.next_action && (
                   <div className="text-xs text-hud-muted mt-0.5">{item.next_action}</div>

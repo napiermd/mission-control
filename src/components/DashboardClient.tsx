@@ -56,15 +56,23 @@ export default function DashboardClient({
     return allItems.filter((item) => domainToVenture(item.domain) === venture)
   }, [allItems, venture])
 
+  // ATTENTION: high-score items that need awareness (includes blocked, no next_action, or stale)
   const attention = useMemo(() => {
-    return filtered.filter((i) => !i.is_recurring).slice(0, 8)
+    return filtered
+      .filter((i) => !i.is_recurring && i.title.length > 10)
+      .filter((i) => !i.next_action || i.status === "blocked" || i._score >= 30)
+      .slice(0, 8)
   }, [filtered])
 
+  // TASK BOARD: items with a real, distinct next_action you can check off
+  // Excludes items already in ATTENTION to avoid duplication
+  const attentionIds = new Set(attention.map((i) => i.id))
   const actionable = useMemo(() => {
     return filtered
-      .filter((i) => i.next_action && i.status !== "blocked" && !i.is_recurring)
+      .filter((i) => i.next_action && i.next_action.length > 10 && !i.is_recurring && i.status !== "blocked")
+      .filter((i) => !attentionIds.has(i.id))
       .slice(0, 12)
-  }, [filtered])
+  }, [filtered, attentionIds])
 
   return (
     <div className="space-y-6">
